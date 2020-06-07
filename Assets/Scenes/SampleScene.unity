@@ -152,6 +152,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mat: {fileID: 2100000, guid: 296e45088be338b44bdc7902c47d1c0c, type: 2}
+  video: {fileID: 157268929}
 --- !u!328 &157268929
 VideoPlayer:
   m_ObjectHideFlags: 0
@@ -185,7 +186,7 @@ VideoPlayer:
   m_SkipOnDrop: 1
   m_Looping: 1
   m_WaitForFirstFrame: 1
-  m_FrameReadyEventEnabled: 0
+  m_FrameReadyEventEnabled: 1
 --- !u!4 &157268930
 Transform:
   m_ObjectHideFlags: 0
@@ -230,15 +231,19 @@ PlayableDirector:
   m_PlayableAsset: {fileID: 11400000, guid: 73591d75f40650741854793f175ea43a, type: 2}
   m_InitialState: 1
   m_WrapMode: 2
-  m_DirectorUpdateMode: 3
+  m_DirectorUpdateMode: 1
   m_InitialTime: 0
   m_SceneBindings:
   - key: {fileID: 8971497674630175805, guid: 73591d75f40650741854793f175ea43a, type: 2}
     value: {fileID: 0}
   - key: {fileID: -6784345507791937223, guid: 73591d75f40650741854793f175ea43a, type: 2}
     value: {fileID: 894797863}
+  - key: {fileID: -4976433749536539637, guid: 73591d75f40650741854793f175ea43a, type: 2}
+    value: {fileID: 0}
   m_ExposedReferences:
-    m_References: []
+    m_References:
+    - 2acb4c0b1d018f348bbfc2b4f62d2a44: {fileID: 157268927}
+    - 842ceb7316d0dc34db530cb64523d829: {fileID: 157268927}
 --- !u!4 &508382438
 Transform:
   m_ObjectHideFlags: 0

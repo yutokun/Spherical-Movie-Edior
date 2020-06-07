@@ -13,6 +13,7 @@ public class TimelinePlayer : MonoBehaviour
     void Start()
     {
         director = GetComponent<PlayableDirector>();
+        director.timeUpdateMode = DirectorUpdateMode.Manual;
     }
 
     void Update()

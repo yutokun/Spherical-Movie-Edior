@@ -1,21 +1,41 @@
 ﻿using UnityEngine;
+using UnityEngine.Timeline;
 using UnityEngine.Video;
 
-[RequireComponent(typeof(VideoPlayer))]
-public class VideoTransporter : MonoBehaviour
+public class VideoTransporter : MonoBehaviour, ITimeControl
 {
     [SerializeField]
     Material mat;
 
+    [SerializeField]
     VideoPlayer video;
-
-    void Start()
-    {
-        video = GetComponent<VideoPlayer>();
-    }
 
     void Update()
     {
         mat.mainTexture = video.texture;
+    }
+
+    public void SetTime(double time)
+    {
+        if (Application.isPlaying) return;
+
+        video.time = time;
+        mat.mainTexture = video.texture;
+    }
+
+    public void OnControlTimeStart()
+    {
+        if (Application.isPlaying) return;
+
+        video.Play();
+        video.Pause();
+    }
+
+    public void OnControlTimeStop()
+    {
+        if (Application.isPlaying) return;
+
+        video.Stop();
+        // TODO 真っ暗にでもするか
     }
 }
