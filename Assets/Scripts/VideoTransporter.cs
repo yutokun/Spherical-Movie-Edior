@@ -35,7 +35,6 @@ public class VideoTransporter : MonoBehaviour, ITimeControl
     {
         if (Application.isPlaying) return;
 
-        video.Stop();
-        // TODO 真っ暗にでもするか
+        if (video != null) video.Stop();
     }
 }
