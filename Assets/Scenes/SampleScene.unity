@@ -132,6 +132,8 @@ GameObject:
   - component: {fileID: 157268930}
   - component: {fileID: 157268929}
   - component: {fileID: 157268928}
+  - component: {fileID: 157268931}
+  - component: {fileID: 157268932}
   m_Layer: 0
   m_Name: Video Player
   m_TagString: Untagged
@@ -182,7 +184,7 @@ VideoPlayer:
   m_EnabledAudioTracks: 01
   m_DirectAudioMutes: 00
   m_ControlledAudioTrackCount: 1
-  m_PlayOnAwake: 1
+  m_PlayOnAwake: 0
   m_SkipOnDrop: 1
   m_Looping: 1
   m_WaitForFirstFrame: 1
@@ -201,6 +203,37 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &157268931
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 157268927}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6646318b93a78d84b9c1402e9298b646, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  video: {fileID: 157268929}
+--- !u!114 &157268932
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 157268927}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fb011a748e9ac8a468fa8721bfd96ff4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  video: {fileID: 157268929}
+  isImage: 1
+  height: 1024
+  width: 1024
+  renderStereo: 1
+  stereoSeparation: 0.065
 --- !u!1 &508382436
 GameObject:
   m_ObjectHideFlags: 0
@@ -234,8 +267,6 @@ PlayableDirector:
   m_DirectorUpdateMode: 1
   m_InitialTime: 0
   m_SceneBindings:
-  - key: {fileID: 8971497674630175805, guid: 73591d75f40650741854793f175ea43a, type: 2}
-    value: {fileID: 0}
   - key: {fileID: -6784345507791937223, guid: 73591d75f40650741854793f175ea43a, type: 2}
     value: {fileID: 894797863}
   - key: {fileID: -4976433749536539637, guid: 73591d75f40650741854793f175ea43a, type: 2}
