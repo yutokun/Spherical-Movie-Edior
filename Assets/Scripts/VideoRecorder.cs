@@ -9,6 +9,7 @@ using UnityEngine.Video;
 public class VideoRecorder : MonoBehaviour
 {
     RecorderController controller;
+    ImageRecorderSettings image;
 
     long frame = 1, frameCount;
     bool nextFrameExists = true;
@@ -38,11 +39,9 @@ public class VideoRecorder : MonoBehaviour
     void Start()
     {
         var settings = ScriptableObject.CreateInstance<RecorderControllerSettings>();
-        settings.FrameRate = (float)video.clip.frameRate;
-        settings.CapFrameRate = true;
-        settings.FrameRatePlayback = FrameRatePlayback.Constant;
+        settings.SetRecordModeToSingleFrame(0);
 
-        var image = ScriptableObject.CreateInstance<ImageRecorderSettings>();
+        image = ScriptableObject.CreateInstance<ImageRecorderSettings>();
         image.imageInputSettings = new Camera360InputSettings
         {
             Source = ImageSource.MainCamera,
@@ -55,7 +54,7 @@ public class VideoRecorder : MonoBehaviour
         image.OutputFormat = ImageRecorderSettings.ImageRecorderOutputFormat.PNG;
         image.FileNameGenerator.Root = OutputPath.Root.Absolute;
         image.FileNameGenerator.Leaf = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "image sequence");
-        image.FileNameGenerator.FileName = "image_<Frame>";
+        image.FileNameGenerator.FileName = "image_";
         settings.AddRecorderSettings(image);
 
         controller = new RecorderController(settings);
@@ -74,13 +73,12 @@ public class VideoRecorder : MonoBehaviour
 
     void VideoOnFrameReady(VideoPlayer source, long frameidx)
     {
-        StartCoroutine(RecordFrame((int)frameidx));
+        StartCoroutine(RecordFrame());
     }
 
-    IEnumerator RecordFrame(int frameId)
+    IEnumerator RecordFrame()
     {
-        controller.Settings.SetRecordModeToSingleFrame(frameId);
-        Debug.Log($"Frame ID: {frame.ToString()}");
+        image.FileNameGenerator.FileName = $"image_{frame:0000}";
         controller.PrepareRecording();
         controller.StartRecording();
         yield return new WaitForSeconds(interval);
