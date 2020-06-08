@@ -28,6 +28,9 @@ public class VideoRecorder : MonoBehaviour
     int width = 4096;
 
     [SerializeField]
+    int mapSize = 4096;
+
+    [SerializeField]
     bool renderStereo = true;
 
     [SerializeField]
@@ -42,7 +45,7 @@ public class VideoRecorder : MonoBehaviour
         image.imageInputSettings = new Camera360InputSettings
         {
             Source = ImageSource.MainCamera,
-            MapSize = 4096,
+            MapSize = mapSize,
             OutputHeight = height,
             OutputWidth = width,
             RenderStereo = renderStereo,
