@@ -19,10 +19,6 @@ public class VideoRecorder : MonoBehaviour
     [SerializeField]
     VideoPlayer video;
 
-    // TODO エンコード時の fps をオーバーライドできるように
-    // [SerializeField]
-    // float frameRate = 30f;
-
     [SerializeField, Header("Image Settings")]
     int height = 4096;
 
@@ -40,6 +36,12 @@ public class VideoRecorder : MonoBehaviour
 
     [SerializeField, Header("Encode Settings")]
     bool encodeOnFinish = true; // TODO 検出して自動化できそう
+
+    [SerializeField]
+    bool overrideFPS;
+
+    [SerializeField]
+    float fpsForOverride = 30f;
 
     void Start()
     {
@@ -103,9 +105,10 @@ public class VideoRecorder : MonoBehaviour
 
     void EncodeToVideo()
     {
+        var fps = (overrideFPS ? fpsForOverride : video.clip.frameRate).ToString();
         var startInfo = new ProcessStartInfo
         {
-            Arguments = "-r 12.2 -i image_%04d.png -vcodec libx264 -pix_fmt yuv420p out.mp4",
+            Arguments = $"-r {fps} -i image_%04d.png -vcodec libx264 -pix_fmt yuv420p out.mp4",
             FileName = "ffmpeg",
             WorkingDirectory = image.FileNameGenerator.Leaf
         };
