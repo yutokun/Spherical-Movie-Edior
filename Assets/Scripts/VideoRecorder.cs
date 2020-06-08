@@ -47,12 +47,6 @@ public class VideoRecorder : MonoBehaviour
     bool encodeOnFinish = true; // TODO 検出して自動化できそう
 
     [SerializeField]
-    bool overrideFPS;
-
-    [SerializeField]
-    float fpsForOverride = 30f;
-
-    [SerializeField]
     Codec codec;
 
     void Start()
@@ -118,7 +112,6 @@ public class VideoRecorder : MonoBehaviour
 
     void EncodeToVideo()
     {
-        var fps = (overrideFPS ? fpsForOverride : video.clip.frameRate).ToString();
         string codec;
         switch (this.codec)
         {
@@ -144,7 +137,7 @@ public class VideoRecorder : MonoBehaviour
 
         var startInfo = new ProcessStartInfo
         {
-            Arguments = $"-r {fps} -i image_%04d.png -vcodec {codec} -pix_fmt yuv420p out.mp4",
+            Arguments = $"-r {video.clip.frameRate.ToString()} -i image_%04d.png -vcodec {codec} -pix_fmt yuv420p out.mp4",
             FileName = "ffmpeg",
             WorkingDirectory = image.FileNameGenerator.Leaf
         };
