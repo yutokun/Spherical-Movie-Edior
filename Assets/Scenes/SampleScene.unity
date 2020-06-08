@@ -217,8 +217,13 @@ MonoBehaviour:
   video: {fileID: 157268929}
   height: 1024
   width: 1024
+  mapSize: 4096
   renderStereo: 1
   stereoSeparation: 0.065
+  encodeOnFinish: 1
+  overrideFPS: 0
+  fpsForOverride: 30
+  codec: 0
 --- !u!1 &508382436
 GameObject:
   m_ObjectHideFlags: 0

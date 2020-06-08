@@ -10,6 +10,14 @@ using Debug = UnityEngine.Debug;
 
 public class VideoRecorder : MonoBehaviour
 {
+    enum Codec
+    {
+        H264,
+        H265,
+        H264_NVENC,
+        H265_NVENC
+    }
+
     RecorderController controller;
     ImageRecorderSettings image;
 
@@ -42,6 +50,9 @@ public class VideoRecorder : MonoBehaviour
 
     [SerializeField]
     float fpsForOverride = 30f;
+
+    [SerializeField]
+    Codec codec;
 
     void Start()
     {
@@ -106,9 +117,32 @@ public class VideoRecorder : MonoBehaviour
     void EncodeToVideo()
     {
         var fps = (overrideFPS ? fpsForOverride : video.clip.frameRate).ToString();
+        string codec;
+        switch (this.codec)
+        {
+            case Codec.H264:
+                codec = "libx264";
+                break;
+
+            case Codec.H265:
+                codec = "hevc";
+                break;
+
+            case Codec.H264_NVENC:
+                codec = "h264_nvenc";
+                break;
+
+            case Codec.H265_NVENC:
+                codec = "hevc_nvenc";
+                break;
+
+            default:
+                throw new ArgumentOutOfRangeException();
+        }
+
         var startInfo = new ProcessStartInfo
         {
-            Arguments = $"-r {fps} -i image_%04d.png -vcodec libx264 -pix_fmt yuv420p out.mp4",
+            Arguments = $"-r {fps} -i image_%04d.png -vcodec {codec} -pix_fmt yuv420p out.mp4",
             FileName = "ffmpeg",
             WorkingDirectory = image.FileNameGenerator.Leaf
         };
