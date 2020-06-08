@@ -54,7 +54,6 @@ public class VideoRecorder : MonoBehaviour
         image.OutputFormat = ImageRecorderSettings.ImageRecorderOutputFormat.PNG;
         image.FileNameGenerator.Root = OutputPath.Root.Absolute;
         image.FileNameGenerator.Leaf = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "image sequence");
-        image.FileNameGenerator.FileName = "image_";
         settings.AddRecorderSettings(image);
 
         controller = new RecorderController(settings);
