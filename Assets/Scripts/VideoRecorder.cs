@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Collections;
 using System.IO;
+using Cysharp.Threading.Tasks;
 using UnityEditor.Recorder;
 using UnityEditor.Recorder.Input;
 using UnityEngine;
@@ -70,17 +70,12 @@ public class VideoRecorder : MonoBehaviour
         source.Pause();
     }
 
-    void VideoOnFrameReady(VideoPlayer source, long frameidx)
-    {
-        StartCoroutine(RecordFrame());
-    }
-
-    IEnumerator RecordFrame()
+    async void VideoOnFrameReady(VideoPlayer source, long frameidx)
     {
         image.FileNameGenerator.FileName = $"image_{frame:0000}";
         controller.PrepareRecording();
         controller.StartRecording();
-        yield return new WaitWhile(() => controller.IsRecording());
+        await UniTask.WaitWhile(() => controller.IsRecording());
         if (nextFrameExists) nextFrameExists = Next();
     }
 
