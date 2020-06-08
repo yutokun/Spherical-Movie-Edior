@@ -759,12 +759,12 @@ MonoBehaviour:
     exposedName: 2acb4c0b1d018f348bbfc2b4f62d2a44
     defaultValue: {fileID: 0}
   prefabGameObject: {fileID: 0}
-  updateParticle: 1
+  updateParticle: 0
   particleRandomSeed: 3206
-  updateDirector: 1
+  updateDirector: 0
   updateITimeControl: 1
   searchHierarchy: 0
-  active: 1
+  active: 0
   postPlayback: 2
 --- !u!114 &5799620316740104902
 MonoBehaviour:
