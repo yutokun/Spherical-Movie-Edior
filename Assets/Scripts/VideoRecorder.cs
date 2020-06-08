@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.IO;
 using Cysharp.Threading.Tasks;
+using UnityEditor;
 using UnityEditor.Recorder;
 using UnityEditor.Recorder.Input;
 using UnityEngine;
@@ -101,6 +102,7 @@ public class VideoRecorder : MonoBehaviour
         else
         {
             if (encodeOnFinish) EncodeToVideo();
+            EditorApplication.ExitPlaymode();
         }
     }
 
