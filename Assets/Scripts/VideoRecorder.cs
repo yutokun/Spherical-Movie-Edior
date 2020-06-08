@@ -51,6 +51,11 @@ public class VideoRecorder : MonoBehaviour
 
     void Start()
     {
+        PrepareToRecord();
+    }
+
+    void PrepareToRecord()
+    {
         var settings = ScriptableObject.CreateInstance<RecorderControllerSettings>();
         settings.SetRecordModeToSingleFrame(0);
 
