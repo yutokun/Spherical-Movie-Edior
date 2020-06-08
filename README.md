@@ -1,4 +1,4 @@
-# Spherical Movie Edior
+# Spherical Movie Editor
 
 wip
 
