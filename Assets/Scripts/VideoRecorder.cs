@@ -33,9 +33,6 @@ public class VideoRecorder : MonoBehaviour
     [SerializeField]
     float stereoSeparation = 0.065f;
 
-    [SerializeField, Header("Debug")]
-    float interval = 0.5f;
-
     void Start()
     {
         var settings = ScriptableObject.CreateInstance<RecorderControllerSettings>();
@@ -81,8 +78,7 @@ public class VideoRecorder : MonoBehaviour
         image.FileNameGenerator.FileName = $"image_{frame:0000}";
         controller.PrepareRecording();
         controller.StartRecording();
-        yield return new WaitForSeconds(interval);
-        controller.StopRecording();
+        yield return new WaitWhile(() => controller.IsRecording());
         if (nextFrameExists) nextFrameExists = Next();
     }
 
