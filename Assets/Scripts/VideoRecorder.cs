@@ -71,7 +71,7 @@ public class VideoRecorder : MonoBehaviour
         };
         image.OutputFormat = ImageRecorderSettings.ImageRecorderOutputFormat.PNG;
         image.FileNameGenerator.Root = OutputPath.Root.Absolute;
-        image.FileNameGenerator.Leaf = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "image sequence");
+        image.FileNameGenerator.Leaf = Path.Combine(Directory.GetCurrentDirectory(), "image sequence");
         settings.AddRecorderSettings(image);
 
         controller = new RecorderController(settings);
@@ -142,15 +142,16 @@ public class VideoRecorder : MonoBehaviour
                 throw new ArgumentOutOfRangeException();
         }
 
+        var destination = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "out.mp4");
         var startInfo = new ProcessStartInfo
         {
-            Arguments = $"-r {video.clip.frameRate.ToString()} -i image_%04d.png -vcodec {codec} -pix_fmt yuv420p out.mp4",
+            Arguments = $"-r {video.clip.frameRate.ToString()} -i image_%04d.png -vcodec {codec} -pix_fmt yuv420p \"{destination}\"",
             FileName = "ffmpeg",
             WorkingDirectory = image.FileNameGenerator.Leaf
         };
         var process = new Process { StartInfo = startInfo };
         process.Start();
-        Debug.Log("Creating video... "); // TODO
+        Debug.Log($"Creating video in {destination}");
     }
 
     void OnApplicationQuit()
