@@ -53,7 +53,17 @@ public class VideoRecorder : MonoBehaviour
 
     void Start()
     {
+        RemoveImages();
         PrepareToRecord();
+    }
+
+    void RemoveImages()
+    {
+        if (Directory.Exists(WorkDir))
+        {
+            Directory.Delete(WorkDir, true);
+            Debug.Log("Removed old images.");
+        }
     }
 
     void PrepareToRecord()
