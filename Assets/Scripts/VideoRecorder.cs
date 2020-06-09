@@ -52,6 +52,9 @@ public class VideoRecorder : MonoBehaviour
     [SerializeField]
     Codec codec;
 
+    [SerializeField, Range(0, 51)]
+    int crf = 23;
+
     [SerializeField]
     string fileName = "encoded";
 
@@ -162,7 +165,7 @@ public class VideoRecorder : MonoBehaviour
         var destination = GetValidFilePath();
         var startInfo = new ProcessStartInfo
         {
-            Arguments = $"-r {video.clip.frameRate.ToString()} -i image_%04d.png -vcodec {codec} -pix_fmt yuv420p \"{destination}\"",
+            Arguments = $"-r {video.clip.frameRate.ToString()} -i image_%04d.png -vcodec {codec} -crf {crf.ToString()} -pix_fmt yuv420p \"{destination}\"",
             FileName = "ffmpeg",
             WorkingDirectory = WorkDir
         };
