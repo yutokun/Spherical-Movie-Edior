@@ -86,6 +86,7 @@ public class VideoRecorder : MonoBehaviour
     void VideoOnStarted(VideoPlayer source)
     {
         source.Pause();
+        Debug.Log("Start Capturing");
     }
 
     async void VideoOnFrameReady(VideoPlayer source, long frameidx)
@@ -100,6 +101,7 @@ public class VideoRecorder : MonoBehaviour
         }
         else
         {
+            Debug.Log("Finish Capturing");
             if (encodeOnFinish) EncodeToVideo();
             EditorApplication.ExitPlaymode();
         }
@@ -148,6 +150,7 @@ public class VideoRecorder : MonoBehaviour
         };
         var process = new Process { StartInfo = startInfo };
         process.Start();
+        Debug.Log("Creating video... "); // TODO
     }
 
     void OnApplicationQuit()
