@@ -50,7 +50,7 @@ public class VideoRecorder : MonoBehaviour
     bool encodeOnFinish = true; // TODO 検出して自動化できそう
 
     [SerializeField]
-    Codec codec;
+    Codec codec = Codec.H265;
 
     [SerializeField, Range(0, 51)]
     int crf = 23;
