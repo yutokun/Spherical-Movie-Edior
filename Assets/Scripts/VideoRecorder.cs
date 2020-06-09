@@ -25,7 +25,8 @@ public class VideoRecorder : MonoBehaviour
     long frame = 1, frameCount;
     bool nextFrameExists = true;
 
-    string WorkDir => Path.Combine(Directory.GetCurrentDirectory(), "image sequence");
+    static string WorkDir => Path.Combine(Directory.GetCurrentDirectory(), "image sequence");
+    static string DestinationDir => Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
 
     [SerializeField]
     VideoPlayer video;
@@ -50,6 +51,9 @@ public class VideoRecorder : MonoBehaviour
 
     [SerializeField]
     Codec codec;
+
+    [SerializeField]
+    string fileName = "encoded";
 
     void Start()
     {
@@ -154,7 +158,8 @@ public class VideoRecorder : MonoBehaviour
                 throw new ArgumentOutOfRangeException();
         }
 
-        var destination = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "out.mp4");
+
+        var destination = GetValidFilePath();
         var startInfo = new ProcessStartInfo
         {
             Arguments = $"-r {video.clip.frameRate.ToString()} -i image_%04d.png -vcodec {codec} -pix_fmt yuv420p \"{destination}\"",
@@ -164,6 +169,20 @@ public class VideoRecorder : MonoBehaviour
         var process = new Process { StartInfo = startInfo };
         process.Start();
         Debug.Log($"Creating video in {destination}");
+    }
+
+    string GetValidFilePath()
+    {
+        var path = Path.Combine(DestinationDir, $"{fileName}.mp4");
+        if (!File.Exists(path)) return path;
+
+        for (var i = 2; i < int.MaxValue; i++)
+        {
+            path = Path.Combine(DestinationDir, $"{fileName} {i.ToString()}.mp4");
+            if (!File.Exists(path)) return path;
+        }
+
+        throw new Exception("Couldn't create valid file path.");
     }
 
     void OnApplicationQuit()

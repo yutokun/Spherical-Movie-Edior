@@ -221,9 +221,8 @@ MonoBehaviour:
   renderStereo: 1
   stereoSeparation: 0.065
   encodeOnFinish: 1
-  overrideFPS: 0
-  fpsForOverride: 30
   codec: 0
+  fileName: encoded
 --- !u!1 &508382436
 GameObject:
   m_ObjectHideFlags: 0
