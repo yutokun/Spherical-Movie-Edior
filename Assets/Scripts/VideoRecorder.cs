@@ -192,4 +192,9 @@ public class VideoRecorder : MonoBehaviour
     {
         controller?.StopRecording();
     }
+
+    void Reset()
+    {
+        if (!video) video = GetComponent<VideoPlayer>();
+    }
 }
