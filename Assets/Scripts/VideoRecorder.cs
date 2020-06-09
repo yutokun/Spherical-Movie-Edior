@@ -25,6 +25,8 @@ public class VideoRecorder : MonoBehaviour
     long frame = 1, frameCount;
     bool nextFrameExists = true;
 
+    string WorkDir => Path.Combine(Directory.GetCurrentDirectory(), "image sequence");
+
     [SerializeField]
     VideoPlayer video;
 
@@ -71,7 +73,7 @@ public class VideoRecorder : MonoBehaviour
         };
         image.OutputFormat = ImageRecorderSettings.ImageRecorderOutputFormat.PNG;
         image.FileNameGenerator.Root = OutputPath.Root.Absolute;
-        image.FileNameGenerator.Leaf = Path.Combine(Directory.GetCurrentDirectory(), "image sequence");
+        image.FileNameGenerator.Leaf = WorkDir;
         settings.AddRecorderSettings(image);
 
         controller = new RecorderController(settings);
@@ -147,7 +149,7 @@ public class VideoRecorder : MonoBehaviour
         {
             Arguments = $"-r {video.clip.frameRate.ToString()} -i image_%04d.png -vcodec {codec} -pix_fmt yuv420p \"{destination}\"",
             FileName = "ffmpeg",
-            WorkingDirectory = image.FileNameGenerator.Leaf
+            WorkingDirectory = WorkDir
         };
         var process = new Process { StartInfo = startInfo };
         process.Start();
