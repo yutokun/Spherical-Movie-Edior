@@ -28,7 +28,7 @@ public class VideoEncoder : MonoBehaviour
         // TODO source:URL にも対応
         var path = Path.Combine(Directory.GetParent(Application.dataPath).FullName, clip.originalPath);
         var extension = await GetSuitableAudioExtension(path);
-        var destination = Path.Combine(VideoRecorder.WorkDir, $"audio.{extension}");
+        var destination = Path.Combine(PathProvider.WorkDir, $"audio.{extension}");
 
         var startInfo = new ProcessStartInfo
         {

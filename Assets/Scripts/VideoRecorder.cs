@@ -25,9 +25,6 @@ public class VideoRecorder : MonoBehaviour
     long frame = 1, frameCount;
     bool nextFrameExists = true;
 
-    public static string WorkDir => Path.Combine(Directory.GetCurrentDirectory(), "VideoRecorder");
-    public static string DestinationDir => Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-
     [SerializeField]
     VideoPlayer video;
 
@@ -66,9 +63,9 @@ public class VideoRecorder : MonoBehaviour
 
     void RemoveImages()
     {
-        if (Directory.Exists(WorkDir))
+        if (Directory.Exists(PathProvider.WorkDir))
         {
-            Directory.Delete(WorkDir, true);
+            Directory.Delete(PathProvider.WorkDir, true);
             Debug.Log("Removed old images.");
         }
     }
@@ -90,7 +87,7 @@ public class VideoRecorder : MonoBehaviour
         };
         image.OutputFormat = ImageRecorderSettings.ImageRecorderOutputFormat.PNG;
         image.FileNameGenerator.Root = OutputPath.Root.Absolute;
-        image.FileNameGenerator.Leaf = WorkDir;
+        image.FileNameGenerator.Leaf = PathProvider.WorkDir;
         settings.AddRecorderSettings(image);
 
         controller = new RecorderController(settings);
@@ -172,7 +169,7 @@ public class VideoRecorder : MonoBehaviour
         {
             Arguments = $"-r {video.clip.frameRate.ToString()} -i image_%04d.png -i \"{audioPath}\" -vcodec {codec} -crf {crf.ToString()} -pix_fmt yuv420p \"{destination}\"",
             FileName = "ffmpeg",
-            WorkingDirectory = WorkDir
+            WorkingDirectory = PathProvider.WorkDir
         };
         var process = new Process { StartInfo = startInfo };
         process.Start();
@@ -181,12 +178,12 @@ public class VideoRecorder : MonoBehaviour
 
     string GetValidFilePath()
     {
-        var path = Path.Combine(DestinationDir, $"{fileName}.mp4");
+        var path = Path.Combine(PathProvider.DestinationDir, $"{fileName}.mp4");
         if (!File.Exists(path)) return path;
 
         for (var i = 2; i < int.MaxValue; i++)
         {
-            path = Path.Combine(DestinationDir, $"{fileName} {i.ToString()}.mp4");
+            path = Path.Combine(PathProvider.DestinationDir, $"{fileName} {i.ToString()}.mp4");
             if (!File.Exists(path)) return path;
         }
 
