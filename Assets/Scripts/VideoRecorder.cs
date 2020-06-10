@@ -25,8 +25,8 @@ public class VideoRecorder : MonoBehaviour
     long frame = 1, frameCount;
     bool nextFrameExists = true;
 
-    static string WorkDir => Path.Combine(Directory.GetCurrentDirectory(), "image sequence");
-    static string DestinationDir => Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+    public static string WorkDir => Path.Combine(Directory.GetCurrentDirectory(), "VideoRecorder");
+    public static string DestinationDir => Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
 
     [SerializeField]
     VideoPlayer video;
@@ -121,7 +121,12 @@ public class VideoRecorder : MonoBehaviour
         else
         {
             Debug.Log("Finish Capturing");
-            if (encodeOnFinish) EncodeToVideo();
+            if (encodeOnFinish)
+            {
+                var path = await VideoEncoder.ExtractAudio();
+                EncodeToVideo(path);
+            }
+
             EditorApplication.ExitPlaymode();
         }
     }
@@ -136,7 +141,7 @@ public class VideoRecorder : MonoBehaviour
         return frame <= frameCount;
     }
 
-    void EncodeToVideo()
+    void EncodeToVideo(string audioPath)
     {
         string codec;
         switch (this.codec)
@@ -165,7 +170,7 @@ public class VideoRecorder : MonoBehaviour
         var destination = GetValidFilePath();
         var startInfo = new ProcessStartInfo
         {
-            Arguments = $"-r {video.clip.frameRate.ToString()} -i image_%04d.png -vcodec {codec} -crf {crf.ToString()} -pix_fmt yuv420p \"{destination}\"",
+            Arguments = $"-r {video.clip.frameRate.ToString()} -i image_%04d.png -i \"{audioPath}\" -vcodec {codec} -crf {crf.ToString()} -pix_fmt yuv420p \"{destination}\"",
             FileName = "ffmpeg",
             WorkingDirectory = WorkDir
         };
