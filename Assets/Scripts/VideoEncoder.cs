@@ -75,4 +75,55 @@ public class VideoEncoder : MonoBehaviour
 
         return extension;
     }
+
+    public static void EncodeToVideo(VideoClip clip, Codec codec, string fileName, int crf, string audioPath)
+    {
+        string codecStr;
+        switch (codec)
+        {
+            case Codec.H264:
+                codecStr = "libx264";
+                break;
+
+            case Codec.H265:
+                codecStr = "hevc";
+                break;
+
+            case Codec.H264_NVENC:
+                codecStr = "h264_nvenc";
+                break;
+
+            case Codec.H265_NVENC:
+                codecStr = "hevc_nvenc";
+                break;
+
+            default:
+                throw new ArgumentOutOfRangeException();
+        }
+
+        var destination = GetValidFilePath(fileName);
+        var startInfo = new ProcessStartInfo
+        {
+            Arguments = $"-r {clip.frameRate.ToString()} -i image_%04d.png -i \"{audioPath}\" -vcodec {codecStr} -crf {crf.ToString()} -pix_fmt yuv420p \"{destination}\"",
+            FileName = "ffmpeg",
+            WorkingDirectory = PathProvider.WorkDir
+        };
+        var process = new Process { StartInfo = startInfo };
+        process.Start();
+        Debug.Log($"Creating video in {destination}");
+    }
+
+    static string GetValidFilePath(string fileName)
+    {
+        var path = Path.Combine(PathProvider.DestinationDir, $"{fileName}.mp4");
+        if (!File.Exists(path)) return path;
+
+        for (var i = 2; i < int.MaxValue; i++)
+        {
+            path = Path.Combine(PathProvider.DestinationDir, $"{fileName} {i.ToString()}.mp4");
+            if (!File.Exists(path)) return path;
+        }
+
+        throw new Exception("Couldn't create valid file path.");
+    }
 }

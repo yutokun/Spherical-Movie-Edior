@@ -1,6 +1,4 @@
-﻿using System;
-using System.Diagnostics;
-using System.IO;
+﻿using System.IO;
 using Cysharp.Threading.Tasks;
 using UnityEditor;
 using UnityEditor.Recorder;
@@ -9,16 +7,16 @@ using UnityEngine;
 using UnityEngine.Video;
 using Debug = UnityEngine.Debug;
 
+public enum Codec
+{
+    H264,
+    H265,
+    H264_NVENC,
+    H265_NVENC
+}
+
 public class VideoRecorder : MonoBehaviour
 {
-    enum Codec
-    {
-        H264,
-        H265,
-        H264_NVENC,
-        H265_NVENC
-    }
-
     RecorderController controller;
     ImageRecorderSettings image;
 
@@ -61,7 +59,7 @@ public class VideoRecorder : MonoBehaviour
         PrepareToRecord();
     }
 
-    void RemoveImages()
+    static void RemoveImages()
     {
         if (Directory.Exists(PathProvider.WorkDir))
         {
@@ -99,7 +97,7 @@ public class VideoRecorder : MonoBehaviour
         video.Play();
     }
 
-    void VideoOnStarted(VideoPlayer source)
+    static void VideoOnStarted(VideoPlayer source)
     {
         source.Pause();
         Debug.Log("Start Capturing");
@@ -121,7 +119,7 @@ public class VideoRecorder : MonoBehaviour
             if (encodeOnFinish)
             {
                 var path = await VideoEncoder.ExtractAudio();
-                EncodeToVideo(path);
+                VideoEncoder.EncodeToVideo(video.clip, codec, fileName, crf, path);
             }
 
             EditorApplication.ExitPlaymode();
@@ -136,58 +134,6 @@ public class VideoRecorder : MonoBehaviour
     {
         video.frame = frame++;
         return frame <= frameCount;
-    }
-
-    void EncodeToVideo(string audioPath)
-    {
-        string codec;
-        switch (this.codec)
-        {
-            case Codec.H264:
-                codec = "libx264";
-                break;
-
-            case Codec.H265:
-                codec = "hevc";
-                break;
-
-            case Codec.H264_NVENC:
-                codec = "h264_nvenc";
-                break;
-
-            case Codec.H265_NVENC:
-                codec = "hevc_nvenc";
-                break;
-
-            default:
-                throw new ArgumentOutOfRangeException();
-        }
-
-
-        var destination = GetValidFilePath();
-        var startInfo = new ProcessStartInfo
-        {
-            Arguments = $"-r {video.clip.frameRate.ToString()} -i image_%04d.png -i \"{audioPath}\" -vcodec {codec} -crf {crf.ToString()} -pix_fmt yuv420p \"{destination}\"",
-            FileName = "ffmpeg",
-            WorkingDirectory = PathProvider.WorkDir
-        };
-        var process = new Process { StartInfo = startInfo };
-        process.Start();
-        Debug.Log($"Creating video in {destination}");
-    }
-
-    string GetValidFilePath()
-    {
-        var path = Path.Combine(PathProvider.DestinationDir, $"{fileName}.mp4");
-        if (!File.Exists(path)) return path;
-
-        for (var i = 2; i < int.MaxValue; i++)
-        {
-            path = Path.Combine(PathProvider.DestinationDir, $"{fileName} {i.ToString()}.mp4");
-            if (!File.Exists(path)) return path;
-        }
-
-        throw new Exception("Couldn't create valid file path.");
     }
 
     void OnApplicationQuit()
