@@ -5,7 +5,6 @@ using UnityEditor.Recorder;
 using UnityEditor.Recorder.Input;
 using UnityEngine;
 using UnityEngine.Video;
-using Debug = UnityEngine.Debug;
 
 namespace yutoVR.SphericalMovieEditor
 {
@@ -17,45 +16,17 @@ namespace yutoVR.SphericalMovieEditor
         H265_NVENC
     }
 
-    public class VideoRecorder : MonoBehaviour
+    public class VideoRecorder : EditorWindow
     {
-        RecorderController controller;
-        ImageRecorderSettings image;
+        static RecorderOptions options;
+        static VideoPlayer video;
+        static ImageRecorderSettings image;
+        static RecorderController controller;
+        static long frameCount;
+        static int frame;
+        static bool nextFrameExists;
 
-        long frame = 1, frameCount;
-        bool nextFrameExists = true;
-
-        [SerializeField]
-        VideoPlayer video;
-
-        [SerializeField, Header("Image Settings")]
-        int height = 4096;
-
-        [SerializeField]
-        int width = 4096;
-
-        [SerializeField]
-        int mapSize = 4096;
-
-        [SerializeField]
-        bool renderStereo = true;
-
-        [SerializeField]
-        float stereoSeparation = 0.065f;
-
-        [SerializeField, Header("Encode Settings")]
-        bool encodeOnFinish = true; // TODO 検出して自動化できそう
-
-        [SerializeField]
-        Codec codec = Codec.H265;
-
-        [SerializeField, Range(0, 51)]
-        int crf = 23;
-
-        [SerializeField]
-        string fileName = "encoded";
-
-        void Start()
+        public static void Export()
         {
             RemoveImages();
             PrepareToRecord();
@@ -70,20 +41,21 @@ namespace yutoVR.SphericalMovieEditor
             }
         }
 
-        void PrepareToRecord()
+        static async void PrepareToRecord()
         {
-            var settings = ScriptableObject.CreateInstance<RecorderControllerSettings>();
+            options = AssetDatabase.LoadAssetAtPath<RecorderOptions>(PathProvider.OptionPath);
+            var settings = CreateInstance<RecorderControllerSettings>();
             settings.SetRecordModeToSingleFrame(0);
 
-            image = ScriptableObject.CreateInstance<ImageRecorderSettings>();
+            image = CreateInstance<ImageRecorderSettings>();
             image.imageInputSettings = new Camera360InputSettings
             {
                 Source = ImageSource.MainCamera,
-                MapSize = mapSize,
-                OutputHeight = height,
-                OutputWidth = width,
-                RenderStereo = renderStereo,
-                StereoSeparation = stereoSeparation,
+                MapSize = options.MapSize,
+                OutputHeight = options.Height,
+                OutputWidth = options.Width,
+                RenderStereo = options.renderStereo,
+                StereoSeparation = options.StereoSeparation,
             };
             image.OutputFormat = ImageRecorderSettings.ImageRecorderOutputFormat.PNG;
             image.FileNameGenerator.Root = OutputPath.Root.Absolute;
@@ -92,6 +64,8 @@ namespace yutoVR.SphericalMovieEditor
 
             controller = new RecorderController(settings);
 
+            EditorApplication.EnterPlaymode();
+            video = FindObjectOfType<VideoPlayer>();
             frameCount = (long)video.frameCount;
             video.sendFrameReadyEvents = true;
             video.started += VideoOnStarted;
@@ -105,7 +79,7 @@ namespace yutoVR.SphericalMovieEditor
             Debug.Log("Start Capturing");
         }
 
-        async void VideoOnFrameReady(VideoPlayer source, long frameidx)
+        static async void VideoOnFrameReady(VideoPlayer source, long frameidx)
         {
             image.FileNameGenerator.FileName = $"image_{frame:0000000}";
             controller.PrepareRecording();
@@ -118,11 +92,10 @@ namespace yutoVR.SphericalMovieEditor
             else
             {
                 Debug.Log("Finish Capturing");
-                if (encodeOnFinish)
-                {
-                    var path = await VideoEncoder.ExtractAudio();
-                    VideoEncoder.EncodeToVideo(video.clip, codec, fileName, crf, path);
-                }
+
+                // TODO ffmpeg なければ終了
+                var path = await VideoEncoder.ExtractAudio();
+                VideoEncoder.EncodeToVideo(video.clip, options.Codec, options.FileName, options.Crf, path);
 
                 EditorApplication.ExitPlaymode();
             }
@@ -132,20 +105,16 @@ namespace yutoVR.SphericalMovieEditor
         /// Show next frame.
         /// </summary>
         /// <returns>Return true when another frame exists.</returns>
-        bool Next()
+        static bool Next()
         {
             video.frame = frame++;
             return frame <= frameCount;
         }
 
+        // TODO エディタ拡張の似たやつ
         void OnApplicationQuit()
         {
             controller?.StopRecording();
-        }
-
-        void Reset()
-        {
-            if (!video) video = GetComponent<VideoPlayer>();
         }
     }
 }
