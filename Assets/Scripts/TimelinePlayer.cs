@@ -2,23 +2,26 @@
 using UnityEngine.Playables;
 using UnityEngine.Video;
 
-[RequireComponent(typeof(PlayableDirector))]
-public class TimelinePlayer : MonoBehaviour
+namespace yutoVR.SphericalMovieEditor
 {
-    [SerializeField]
-    VideoPlayer video;
-
-    PlayableDirector director;
-
-    void Start()
+    [RequireComponent(typeof(PlayableDirector))]
+    public class TimelinePlayer : MonoBehaviour
     {
-        director = GetComponent<PlayableDirector>();
-        director.timeUpdateMode = DirectorUpdateMode.Manual;
-    }
+        [SerializeField]
+        VideoPlayer video;
 
-    void Update()
-    {
-        director.time = video.time;
-        director.Evaluate();
+        PlayableDirector director;
+
+        void Start()
+        {
+            director = GetComponent<PlayableDirector>();
+            director.timeUpdateMode = DirectorUpdateMode.Manual;
+        }
+
+        void Update()
+        {
+            director.time = video.time;
+            director.Evaluate();
+        }
     }
 }

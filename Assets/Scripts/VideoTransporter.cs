@@ -2,39 +2,42 @@
 using UnityEngine.Timeline;
 using UnityEngine.Video;
 
-public class VideoTransporter : MonoBehaviour, ITimeControl
+namespace yutoVR.SphericalMovieEditor
 {
-    [SerializeField]
-    Material mat;
-
-    [SerializeField]
-    VideoPlayer video;
-
-    void Update()
+    public class VideoTransporter : MonoBehaviour, ITimeControl
     {
-        mat.mainTexture = video.texture;
-    }
+        [SerializeField]
+        Material mat;
 
-    public void SetTime(double time)
-    {
-        if (Application.isPlaying) return;
+        [SerializeField]
+        VideoPlayer video;
 
-        video.time = time;
-        mat.mainTexture = video.texture;
-    }
+        void Update()
+        {
+            mat.mainTexture = video.texture;
+        }
 
-    public void OnControlTimeStart()
-    {
-        if (Application.isPlaying) return;
+        public void SetTime(double time)
+        {
+            if (Application.isPlaying) return;
 
-        video.Play();
-        video.Pause();
-    }
+            video.time = time;
+            mat.mainTexture = video.texture;
+        }
 
-    public void OnControlTimeStop()
-    {
-        if (Application.isPlaying) return;
+        public void OnControlTimeStart()
+        {
+            if (Application.isPlaying) return;
 
-        if (video != null) video.Stop();
+            video.Play();
+            video.Pause();
+        }
+
+        public void OnControlTimeStop()
+        {
+            if (Application.isPlaying) return;
+
+            if (video != null) video.Stop();
+        }
     }
 }
