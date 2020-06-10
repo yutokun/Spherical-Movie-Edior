@@ -107,7 +107,7 @@ namespace yutoVR.SphericalMovieEditor
 
         async void VideoOnFrameReady(VideoPlayer source, long frameidx)
         {
-            image.FileNameGenerator.FileName = $"image_{frame:0000}";
+            image.FileNameGenerator.FileName = $"image_{frame:0000000}";
             controller.PrepareRecording();
             controller.StartRecording();
             await UniTask.WaitWhile(() => controller.IsRecording());

@@ -106,7 +106,7 @@ namespace yutoVR.SphericalMovieEditor
             var destination = GetValidFilePath(fileName);
             var startInfo = new ProcessStartInfo
             {
-                Arguments = $"-r {clip.frameRate.ToString()} -i image_%04d.png -i \"{audioPath}\" -vcodec {codecStr} -crf {crf.ToString()} -pix_fmt yuv420p \"{destination}\"",
+                Arguments = $"-r {clip.frameRate.ToString()} -i image_%07d.png -i \"{audioPath}\" -vcodec {codecStr} -crf {crf.ToString()} -pix_fmt yuv420p \"{destination}\"",
                 FileName = "ffmpeg",
                 WorkingDirectory = PathProvider.WorkDir
             };
