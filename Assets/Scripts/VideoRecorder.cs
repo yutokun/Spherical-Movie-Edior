@@ -42,7 +42,7 @@ namespace yutoVR.SphericalMovieEditor
 
         static void PrepareToRecord()
         {
-            options = AssetDatabase.LoadAssetAtPath<RecorderOptions>(PathProvider.OptionPath);
+            LoadPrerequisites();
             options.startRecordingOnEnterPlayMode = true;
             EditorUtility.SetDirty(options);
             AssetDatabase.SaveAssets();
@@ -51,9 +51,15 @@ namespace yutoVR.SphericalMovieEditor
             // なぜならプレイモードに入るタイミングで、おそらくドメインがリロードされて実行が停止してしまうからだ。
         }
 
-        public static void StartRecording()
+        static void LoadPrerequisites()
         {
             options = AssetDatabase.LoadAssetAtPath<RecorderOptions>(PathProvider.OptionPath);
+            video = FindObjectOfType<VideoPlayer>();
+        }
+
+        public static void StartRecording()
+        {
+            LoadPrerequisites();
             var settings = CreateInstance<RecorderControllerSettings>();
             settings.SetRecordModeToSingleFrame(0);
 
@@ -74,7 +80,6 @@ namespace yutoVR.SphericalMovieEditor
 
             controller = new RecorderController(settings);
 
-            video = FindObjectOfType<VideoPlayer>(); // TODO Bridge から持ってこれるな
             video.isLooping = false;
             frameCount = (long)video.frameCount;
             video.sendFrameReadyEvents = true;
@@ -104,11 +109,7 @@ namespace yutoVR.SphericalMovieEditor
             if (!nextFrameExists)
             {
                 Debug.Log("Finish Capturing");
-
-                // TODO ffmpeg なければ終了
-                var path = await VideoEncoder.ExtractAudio();
-                VideoEncoder.EncodeToVideo(video.clip, options.Codec, options.FileName, options.Crf, path);
-
+                Encode();
                 EditorApplication.ExitPlaymode();
             }
         }
@@ -122,6 +123,14 @@ namespace yutoVR.SphericalMovieEditor
             video.frame += 1;
             Debug.Log($"Next Frame is {(video.frame + 1).ToString()}/{frameCount.ToString()}");
             return video.frame < (frameCount - 1);
+        }
+
+        public static async void Encode()
+        {
+            // TODO ffmpeg なければ終了
+            var path = await VideoEncoder.ExtractAudio();
+            LoadPrerequisites();
+            VideoEncoder.EncodeToVideo(video.clip, options.Codec, options.FileName, options.Crf, path);
         }
 
         // TODO エディタ拡張の似たやつ

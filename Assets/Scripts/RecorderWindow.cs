@@ -57,9 +57,14 @@ namespace yutoVR.SphericalMovieEditor
             }
 
             EditorGUILayout.Space();
-            if (GUILayout.Button("Export"))
+            if (GUILayout.Button("Capture and Encode"))
             {
                 VideoRecorder.Export();
+            }
+
+            if (GUILayout.Button("Encode Only"))
+            {
+                VideoRecorder.Encode();
             }
         }
 
