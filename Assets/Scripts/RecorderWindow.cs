@@ -45,6 +45,7 @@ namespace yutoVR.SphericalMovieEditor
 
             if (EditorGUI.EndChangeCheck())
             {
+                Undo.RecordObject(options, "Change Recording Option");
                 options.Height = height;
                 options.Width = width;
                 options.MapSize = mapSize;
