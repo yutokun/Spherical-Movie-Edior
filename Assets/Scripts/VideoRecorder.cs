@@ -23,8 +23,7 @@ namespace yutoVR.SphericalMovieEditor
         static ImageRecorderSettings image;
         static RecorderController controller;
         static long frameCount;
-        static int frame;
-        static bool nextFrameExists;
+        static bool nextFrameExists = true;
 
         public static void Export()
         {
@@ -41,7 +40,18 @@ namespace yutoVR.SphericalMovieEditor
             }
         }
 
-        static async void PrepareToRecord()
+        static void PrepareToRecord()
+        {
+            options = AssetDatabase.LoadAssetAtPath<RecorderOptions>(PathProvider.OptionPath);
+            options.startRecordingOnEnterPlayMode = true;
+            EditorUtility.SetDirty(options);
+            AssetDatabase.SaveAssets();
+            EditorApplication.EnterPlaymode();
+            // ここでシーンに配置した VideoRecorderBridge が StartRecording を叩く。
+            // なぜならプレイモードに入るタイミングで、おそらくドメインがリロードされて実行が停止してしまうからだ。
+        }
+
+        public static void StartRecording()
         {
             options = AssetDatabase.LoadAssetAtPath<RecorderOptions>(PathProvider.OptionPath);
             var settings = CreateInstance<RecorderControllerSettings>();
@@ -64,8 +74,8 @@ namespace yutoVR.SphericalMovieEditor
 
             controller = new RecorderController(settings);
 
-            EditorApplication.EnterPlaymode();
-            video = FindObjectOfType<VideoPlayer>();
+            video = FindObjectOfType<VideoPlayer>(); // TODO Bridge から持ってこれるな
+            video.isLooping = false;
             frameCount = (long)video.frameCount;
             video.sendFrameReadyEvents = true;
             video.started += VideoOnStarted;
@@ -76,12 +86,13 @@ namespace yutoVR.SphericalMovieEditor
         static void VideoOnStarted(VideoPlayer source)
         {
             source.Pause();
+            source.frame = 0;
             Debug.Log("Start Capturing");
         }
 
         static async void VideoOnFrameReady(VideoPlayer source, long frameidx)
         {
-            image.FileNameGenerator.FileName = $"image_{frame:0000000}";
+            image.FileNameGenerator.FileName = $"image_{video.frame:0000000}";
             controller.PrepareRecording();
             controller.StartRecording();
             await UniTask.WaitWhile(() => controller.IsRecording());
@@ -89,7 +100,8 @@ namespace yutoVR.SphericalMovieEditor
             {
                 nextFrameExists = Next();
             }
-            else
+
+            if (!nextFrameExists)
             {
                 Debug.Log("Finish Capturing");
 
@@ -107,8 +119,9 @@ namespace yutoVR.SphericalMovieEditor
         /// <returns>Return true when another frame exists.</returns>
         static bool Next()
         {
-            video.frame = frame++;
-            return frame <= frameCount;
+            video.frame += 1;
+            Debug.Log($"Next Frame is {(video.frame + 1).ToString()}/{frameCount.ToString()}");
+            return video.frame < (frameCount - 1);
         }
 
         // TODO エディタ拡張の似たやつ

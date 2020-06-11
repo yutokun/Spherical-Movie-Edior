@@ -6,6 +6,9 @@ namespace yutoVR.SphericalMovieEditor
     [Serializable]
     public class RecorderOptions : ScriptableObject
     {
+        [HideInInspector]
+        public bool startRecordingOnEnterPlayMode;
+
         [SerializeField, Header("Image Settings")]
         int height = 4096;
 
