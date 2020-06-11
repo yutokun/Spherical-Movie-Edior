@@ -5,7 +5,6 @@ using UnityEditor.Recorder;
 using UnityEditor.Recorder.Input;
 using UnityEngine;
 using UnityEngine.Video;
-using Debug = UnityEngine.Debug;
 
 namespace yutoVR.SphericalMovieEditor
 {
@@ -17,45 +16,16 @@ namespace yutoVR.SphericalMovieEditor
         H265_NVENC
     }
 
-    public class VideoRecorder : MonoBehaviour
+    public class VideoRecorder : EditorWindow
     {
-        RecorderController controller;
-        ImageRecorderSettings image;
+        static RecorderOptions options;
+        static VideoPlayer video;
+        static ImageRecorderSettings image;
+        static RecorderController controller;
+        static long frameCount;
+        static bool nextFrameExists = true;
 
-        long frame = 1, frameCount;
-        bool nextFrameExists = true;
-
-        [SerializeField]
-        VideoPlayer video;
-
-        [SerializeField, Header("Image Settings")]
-        int height = 4096;
-
-        [SerializeField]
-        int width = 4096;
-
-        [SerializeField]
-        int mapSize = 4096;
-
-        [SerializeField]
-        bool renderStereo = true;
-
-        [SerializeField]
-        float stereoSeparation = 0.065f;
-
-        [SerializeField, Header("Encode Settings")]
-        bool encodeOnFinish = true; // TODO 検出して自動化できそう
-
-        [SerializeField]
-        Codec codec = Codec.H265;
-
-        [SerializeField, Range(0, 51)]
-        int crf = 23;
-
-        [SerializeField]
-        string fileName = "encoded";
-
-        void Start()
+        public static void Export()
         {
             RemoveImages();
             PrepareToRecord();
@@ -70,20 +40,38 @@ namespace yutoVR.SphericalMovieEditor
             }
         }
 
-        void PrepareToRecord()
+        static void PrepareToRecord()
         {
-            var settings = ScriptableObject.CreateInstance<RecorderControllerSettings>();
+            LoadPrerequisites();
+            options.startRecordingOnEnterPlayMode = true;
+            EditorUtility.SetDirty(options);
+            AssetDatabase.SaveAssets();
+            EditorApplication.EnterPlaymode();
+            // ここでシーンに配置した VideoRecorderBridge が StartRecording を叩く。
+            // なぜならプレイモードに入るタイミングで、おそらくドメインがリロードされて実行が停止してしまうからだ。
+        }
+
+        static void LoadPrerequisites()
+        {
+            options = AssetDatabase.LoadAssetAtPath<RecorderOptions>(PathProvider.OptionPath);
+            video = FindObjectOfType<VideoPlayer>();
+        }
+
+        public static void StartRecording()
+        {
+            LoadPrerequisites();
+            var settings = CreateInstance<RecorderControllerSettings>();
             settings.SetRecordModeToSingleFrame(0);
 
-            image = ScriptableObject.CreateInstance<ImageRecorderSettings>();
+            image = CreateInstance<ImageRecorderSettings>();
             image.imageInputSettings = new Camera360InputSettings
             {
                 Source = ImageSource.MainCamera,
-                MapSize = mapSize,
-                OutputHeight = height,
-                OutputWidth = width,
-                RenderStereo = renderStereo,
-                StereoSeparation = stereoSeparation,
+                MapSize = options.MapSize,
+                OutputHeight = options.Height,
+                OutputWidth = options.Width,
+                RenderStereo = options.renderStereo,
+                StereoSeparation = options.StereoSeparation,
             };
             image.OutputFormat = ImageRecorderSettings.ImageRecorderOutputFormat.PNG;
             image.FileNameGenerator.Root = OutputPath.Root.Absolute;
@@ -92,6 +80,7 @@ namespace yutoVR.SphericalMovieEditor
 
             controller = new RecorderController(settings);
 
+            video.isLooping = false;
             frameCount = (long)video.frameCount;
             video.sendFrameReadyEvents = true;
             video.started += VideoOnStarted;
@@ -102,12 +91,13 @@ namespace yutoVR.SphericalMovieEditor
         static void VideoOnStarted(VideoPlayer source)
         {
             source.Pause();
+            source.frame = 0;
             Debug.Log("Start Capturing");
         }
 
-        async void VideoOnFrameReady(VideoPlayer source, long frameidx)
+        static async void VideoOnFrameReady(VideoPlayer source, long frameidx)
         {
-            image.FileNameGenerator.FileName = $"image_{frame:0000000}";
+            image.FileNameGenerator.FileName = $"image_{video.frame:0000000}";
             controller.PrepareRecording();
             controller.StartRecording();
             await UniTask.WaitWhile(() => controller.IsRecording());
@@ -115,15 +105,11 @@ namespace yutoVR.SphericalMovieEditor
             {
                 nextFrameExists = Next();
             }
-            else
+
+            if (!nextFrameExists)
             {
                 Debug.Log("Finish Capturing");
-                if (encodeOnFinish)
-                {
-                    var path = await VideoEncoder.ExtractAudio();
-                    VideoEncoder.EncodeToVideo(video.clip, codec, fileName, crf, path);
-                }
-
+                Encode();
                 EditorApplication.ExitPlaymode();
             }
         }
@@ -132,20 +118,25 @@ namespace yutoVR.SphericalMovieEditor
         /// Show next frame.
         /// </summary>
         /// <returns>Return true when another frame exists.</returns>
-        bool Next()
+        static bool Next()
         {
-            video.frame = frame++;
-            return frame <= frameCount;
+            video.frame += 1;
+            Debug.Log($"Next Frame is {(video.frame + 1).ToString()}/{frameCount.ToString()}");
+            return video.frame < (frameCount - 1);
         }
 
+        public static async void Encode()
+        {
+            // TODO ffmpeg なければ終了
+            var path = await VideoEncoder.ExtractAudio();
+            LoadPrerequisites();
+            VideoEncoder.EncodeToVideo(video.clip, options.Codec, options.FileName, options.Crf, path);
+        }
+
+        // TODO エディタ拡張の似たやつ
         void OnApplicationQuit()
         {
             controller?.StopRecording();
-        }
-
-        void Reset()
-        {
-            if (!video) video = GetComponent<VideoPlayer>();
         }
     }
 }
