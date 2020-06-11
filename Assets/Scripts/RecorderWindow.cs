@@ -7,7 +7,7 @@ namespace yutoVR.SphericalMovieEditor
     {
         static RecorderOptions options;
 
-        [MenuItem("Movie/Record...")]
+        [MenuItem("Movie/Export...")]
         public static void Create()
         {
             var window = GetWindow<RecorderWindow>("Spherical Movie Recorder");
