@@ -11,8 +11,8 @@ namespace yutoVR.SphericalMovieEditor
         public static void Create()
         {
             var window = GetWindow<RecorderWindow>("Spherical Movie Recorder");
-            window.minSize = new Vector2(320, 300);
-            window.maxSize = new Vector2(320, 300);
+            window.minSize = new Vector2(320, 254);
+            window.maxSize = new Vector2(320, 254);
             window.autoRepaintOnSceneChange = true;
 
             options = AssetDatabase.LoadAssetAtPath<RecorderOptions>(PathProvider.OptionPath);
