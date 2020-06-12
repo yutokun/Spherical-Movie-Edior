@@ -127,8 +127,8 @@ namespace yutoVR.SphericalMovieEditor
 
         public static async void Encode()
         {
-            // TODO ffmpeg なければ終了
             var path = await VideoEncoder.ExtractAudio();
+            if (string.IsNullOrEmpty(path)) return;
             LoadPrerequisites();
             VideoEncoder.EncodeToVideo(video.clip, options.Codec, options.FileName, options.Crf, path);
         }

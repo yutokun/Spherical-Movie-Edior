@@ -11,8 +11,16 @@ namespace yutoVR.SphericalMovieEditor
 {
     public class VideoEncoder : MonoBehaviour
     {
+        const string FfmpegMissingMessage = "Couldn't execute ffmpeg. Please install it from https://ffmpeg.org/download.html";
+
         public static async Task<string> ExtractAudio()
         {
+            if (!FfmpegIsAvailable)
+            {
+                Debug.Log(FfmpegMissingMessage);
+                return null;
+            }
+
             var videoPlayer = FindObjectOfType<VideoPlayer>();
             if (!videoPlayer)
             {
@@ -48,6 +56,12 @@ namespace yutoVR.SphericalMovieEditor
 
         static async Task<string> GetSuitableAudioExtension(string videoPath)
         {
+            if (!FfmpegIsAvailable)
+            {
+                Debug.Log(FfmpegMissingMessage);
+                return null;
+            }
+
             var startInfo = new ProcessStartInfo
             {
                 Arguments = $"-i \"{videoPath}\"",
@@ -80,6 +94,12 @@ namespace yutoVR.SphericalMovieEditor
 
         public static void EncodeToVideo(VideoClip clip, Codec codec, string fileName, int crf, string audioPath)
         {
+            if (!FfmpegIsAvailable)
+            {
+                Debug.Log(FfmpegMissingMessage);
+                return;
+            }
+
             string codecStr;
             switch (codec)
             {
@@ -127,6 +147,24 @@ namespace yutoVR.SphericalMovieEditor
             }
 
             throw new Exception("Couldn't create valid file path.");
+        }
+
+        static bool FfmpegIsAvailable
+        {
+            get
+            {
+                try
+                {
+                    var startInfo = new ProcessStartInfo { FileName = "ffmpeg" };
+                    var p = new Process { StartInfo = startInfo };
+                    p.Start();
+                    return true;
+                }
+                catch
+                {
+                    return false;
+                }
+            }
         }
     }
 }
