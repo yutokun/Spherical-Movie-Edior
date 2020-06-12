@@ -101,6 +101,7 @@ namespace yutoVR.SphericalMovieEditor
             controller.PrepareRecording();
             controller.StartRecording();
             await UniTask.WaitWhile(() => controller.IsRecording());
+            ProgressUI.Current.SetProgress(video.frame, video.frameCount);
             if (nextFrameExists)
             {
                 nextFrameExists = Next();
