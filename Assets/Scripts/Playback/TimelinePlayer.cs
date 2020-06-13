@@ -106,7 +106,7 @@ namespace yutoVR.SphericalMovieEditor
 
             VideoPlayerPlayableBehaviour.OnVideoFrameIsRendered -= VideoFrameIsRendered;
             Debug.Log("Finish Capturing");
-            VideoEncoder.Encode();
+            VideoEncoder.Encode(clip.start);
             EditorApplication.ExitPlaymode();
         }
 

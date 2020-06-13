@@ -1,6 +1,9 @@
-﻿using UnityEditor;
+﻿using System.Linq;
+using UnityEditor;
 using UnityEditor.Recorder;
 using UnityEngine;
+using UnityEngine.Playables;
+using UnityEngine.Timeline;
 
 namespace yutoVR.SphericalMovieEditor
 {
@@ -66,7 +69,11 @@ namespace yutoVR.SphericalMovieEditor
 
             if (GUILayout.Button("Encode Only"))
             {
-                VideoEncoder.Encode();
+                var director = FindObjectOfType<PlayableDirector>();
+                var tracks = (director.playableAsset as TimelineAsset)?.GetOutputTracks();
+                var track = tracks.First(t => t.name == "Video Preview");
+                var clip = track.GetClips().First(c => c.displayName == "VideoPlayerPlayableAsset");
+                VideoEncoder.Encode(clip.start);
             }
         }
 

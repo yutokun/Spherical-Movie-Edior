@@ -15,13 +15,13 @@ namespace yutoVR.SphericalMovieEditor
     {
         const string FfmpegMissingMessage = "Couldn't execute ffmpeg. Please install it from https://ffmpeg.org/download.html";
 
-        public static async void Encode()
+        public static async void Encode(double audioOffset)
         {
             var path = await ExtractAudio();
             if (string.IsNullOrEmpty(path)) return;
             var options = RecorderOptions.Options;
             var video = FindObjectOfType<VideoPlayer>();
-            EncodeImagesToVideo(video.clip, options.IntermediateFormat, options.Codec, options.FileName, options.Crf, path);
+            EncodeImagesToVideo(video.clip, options.IntermediateFormat, options.Codec, options.FileName, options.Crf, path, audioOffset);
         }
 
         static async Task<string> ExtractAudio()
@@ -103,7 +103,7 @@ namespace yutoVR.SphericalMovieEditor
             return extension;
         }
 
-        static async void EncodeImagesToVideo(VideoClip clip, ImageRecorderSettings.ImageRecorderOutputFormat intermediateFormat, Codec codec, string fileName, int crf, string audioPath)
+        static async void EncodeImagesToVideo(VideoClip clip, ImageRecorderSettings.ImageRecorderOutputFormat intermediateFormat, Codec codec, string fileName, int crf, string audioPath, double audioOffset)
         {
             if (!FfmpegIsAvailable)
             {
@@ -138,7 +138,7 @@ namespace yutoVR.SphericalMovieEditor
             var extension = intermediateFormat == ImageRecorderSettings.ImageRecorderOutputFormat.JPEG ? "jpg" : intermediateFormat.ToString().ToLower();
             var startInfo = new ProcessStartInfo
             {
-                Arguments = $"-r {clip.frameRate.ToString()} -i image_%07d.{extension} -i \"{audioPath}\" -vcodec {codecStr} -acodec copy -crf {crf.ToString()} -pix_fmt yuv420p \"{destination}\"",
+                Arguments = $"-r {clip.frameRate.ToString()} -i image_%07d.{extension} -itsoffset {audioOffset.ToString()} -i \"{audioPath}\" -vcodec {codecStr} -acodec copy -crf {crf.ToString()} -pix_fmt yuv420p \"{destination}\"",
                 FileName = "ffmpeg",
                 WorkingDirectory = PathProvider.WorkDir
             };
