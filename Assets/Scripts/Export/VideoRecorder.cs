@@ -140,11 +140,5 @@ namespace yutoVR.SphericalMovieEditor
             LoadPrerequisites();
             VideoEncoder.EncodeImagesToVideo(video.clip, options.Codec, options.FileName, options.Crf, path);
         }
-
-        // TODO エディタ拡張の似たやつ
-        void OnApplicationQuit()
-        {
-            controller?.StopRecording();
-        }
     }
 }
