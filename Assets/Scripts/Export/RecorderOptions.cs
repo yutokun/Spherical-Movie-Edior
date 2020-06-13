@@ -89,5 +89,14 @@ namespace yutoVR.SphericalMovieEditor
             get => fileName;
             set => fileName = value;
         }
+
+        [SerializeField, Header("Behaviour")]
+        float frameTimeout = 5f;
+
+        public float FrameTimeout
+        {
+            get => frameTimeout;
+            set => frameTimeout = value;
+        }
     }
 }

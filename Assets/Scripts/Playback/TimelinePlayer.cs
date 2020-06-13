@@ -60,7 +60,7 @@ namespace yutoVR.SphericalMovieEditor
 
             if (PlayingState.IsRecording)
             {
-                await UniTask.WaitUntil(() => (Time.unscaledTime - timePreviousCaptured) > 5f);
+                await UniTask.WaitUntil(() => (Time.unscaledTime - timePreviousCaptured) > RecorderOptions.Options.FrameTimeout);
                 timedUp = true;
             }
         }
