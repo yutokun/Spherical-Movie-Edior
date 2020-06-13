@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Video;
 using Debug = UnityEngine.Debug;
@@ -135,6 +136,32 @@ namespace yutoVR.SphericalMovieEditor
             Debug.Log($"Creating video in {destination}");
         }
 
+        public static async UniTask EncodeProxy(VideoClip clip)
+        {
+            if (!FfmpegIsAvailable)
+            {
+                Debug.Log(FfmpegMissingMessage);
+                return;
+            }
+
+            var destination = PathProvider.GetProxyPath(clip);
+            Directory.CreateDirectory(PathProvider.ProxyDir);
+            if (File.Exists(destination)) File.Delete(destination);
+
+            var clipPath = Path.Combine(Directory.GetCurrentDirectory(), clip.originalPath);
+            var startInfo = new ProcessStartInfo
+            {
+                Arguments = $"-r {clip.frameRate.ToString()} -i \"{clipPath}\" -s 512x512 -vcodec libx264 -an -pix_fmt yuv420p \"{destination}\"",
+                FileName = "ffmpeg",
+                WorkingDirectory = PathProvider.WorkDir
+            };
+            var process = new Process { StartInfo = startInfo };
+            process.Start();
+            Debug.Log("Creating Proxy...");
+            await UniTask.DelayFrame(2); // Wait for render log.
+            process.WaitForExit();
+            Debug.Log("Proxy Created");
+        }
 
         static string GetValidFilePath(string fileName)
         {
