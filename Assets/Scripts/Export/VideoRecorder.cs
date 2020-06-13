@@ -35,8 +35,16 @@ namespace yutoVR.SphericalMovieEditor
         {
             if (Directory.Exists(PathProvider.WorkDir))
             {
-                Directory.Delete(PathProvider.WorkDir, true);
-                Debug.Log("Removed old images.");
+                try
+                {
+                    Directory.Delete(PathProvider.WorkDir, true);
+                    Debug.Log("Removed old images.");
+                }
+                catch (IOException)
+                {
+                    Debug.LogError("Maybe other application is using working directory. See an exception below.");
+                    throw;
+                }
             }
         }
 
