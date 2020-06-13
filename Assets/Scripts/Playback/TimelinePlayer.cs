@@ -23,23 +23,26 @@ namespace yutoVR.SphericalMovieEditor
         void Update()
         {
             Debug.Log($"isPlaying:{video.isPlaying.ToString()} isPaused:{video.isPaused.ToString()} isPrepared:{video.isPrepared.ToString()}");
-            
-            if (video.isPlaying)
-            {
-                var tracks = (director.playableAsset as TimelineAsset)?.GetOutputTracks();
-                var track = tracks.First(t => t.name == "Video Preview");
-                var clip = track.GetClips().First(c => c.displayName == "VideoPlayerPlayableAsset");
-                var startTime = clip.start;
 
-                director.time = startTime + video.time;
-                director.Evaluate();
-            }
-            else
+            if (PlayingState.IsPreviewingInPlayMode)
             {
-                // TODO ビデオ領域外の時のタイムライン駆動・DeferredEval のほうが良いとか？ある？
-                var frameDelta = 1f / video.frameRate;
-                director.time += frameDelta;
-                director.Evaluate();
+                if (video.isPlaying)
+                {
+                    var tracks = (director.playableAsset as TimelineAsset)?.GetOutputTracks();
+                    var track = tracks.First(t => t.name == "Video Preview");
+                    var clip = track.GetClips().First(c => c.displayName == "VideoPlayerPlayableAsset");
+                    var startTime = clip.start;
+
+                    director.time = startTime + video.time;
+                    director.Evaluate();
+                }
+                else
+                {
+                    // TODO ビデオ領域外の時のタイムライン駆動・DeferredEval のほうが良いとか？ある？
+                    var frameDelta = 1f / video.frameRate;
+                    director.time += frameDelta;
+                    director.Evaluate();
+                }
             }
         }
     }

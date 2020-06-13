@@ -1,23 +1,27 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.Playables;
 using UnityEngine.Video;
 
-[System.Serializable]
-public class VideoPlayerPlayableAsset : PlayableAsset
+namespace yutoVR.SphericalMovieEditor
 {
-    public ExposedReference<VideoPlayer> videoPlayer;
-    public Material mat;
-
-    VideoClip clip;
-
-    public override Playable CreatePlayable(PlayableGraph graph, GameObject go)
+    [Serializable]
+    public class VideoPlayerPlayableAsset : PlayableAsset
     {
-        var video = videoPlayer.Resolve(graph.GetResolver());
-        clip = video.clip;
-        var behaviour = new VideoPlayerPlayableBehaviour { video = video, mat = mat };
-        return ScriptPlayable<VideoPlayerPlayableBehaviour>.Create(graph, behaviour);
-    }
+        public ExposedReference<VideoPlayer> videoPlayer;
+        public Material mat;
 
-    public override double duration => Duration;
-    double Duration => clip != null ? clip.length : 5;
+        VideoClip clip;
+
+        public override Playable CreatePlayable(PlayableGraph graph, GameObject go)
+        {
+            var video = videoPlayer.Resolve(graph.GetResolver());
+            clip = video.clip;
+            var behaviour = new VideoPlayerPlayableBehaviour { video = video, mat = mat };
+            return ScriptPlayable<VideoPlayerPlayableBehaviour>.Create(graph, behaviour);
+        }
+
+        public override double duration => Duration;
+        double Duration => clip != null ? clip.length : 5;
+    }
 }

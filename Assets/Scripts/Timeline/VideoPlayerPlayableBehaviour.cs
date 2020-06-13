@@ -2,30 +2,33 @@
 using UnityEngine.Playables;
 using UnityEngine.Video;
 
-public class VideoPlayerPlayableBehaviour : PlayableBehaviour
+namespace yutoVR.SphericalMovieEditor
 {
-    public VideoPlayer video;
-    public Material mat;
-
-    public override void OnBehaviourPlay(Playable playable, FrameData info)
+    public class VideoPlayerPlayableBehaviour : PlayableBehaviour
     {
-        if (video == null) return;
+        public VideoPlayer video;
+        public Material mat;
 
-        video.Play();
-    }
+        public override void OnBehaviourPlay(Playable playable, FrameData info)
+        {
+            if (video == null) return;
 
-    public override void OnBehaviourPause(Playable playable, FrameData info)
-    {
-        if (video == null) return;
+            if (PlayingState.IsPreviewingInPlayMode) video.Play();
+        }
 
-        video.Stop();
-    }
+        public override void OnBehaviourPause(Playable playable, FrameData info)
+        {
+            if (video == null) return;
 
-    public override void PrepareFrame(Playable playable, FrameData info)
-    {
-        if (video == null) return;
+            if (PlayingState.IsPreviewingInPlayMode) video.Stop();
+        }
 
-        if (!Application.isPlaying) video.time = playable.GetTime();
-        mat.mainTexture = video.texture;
+        public override void PrepareFrame(Playable playable, FrameData info)
+        {
+            if (video == null) return;
+
+            if (!Application.isPlaying) video.time = playable.GetTime();
+            mat.mainTexture = video.texture;
+        }
     }
 }

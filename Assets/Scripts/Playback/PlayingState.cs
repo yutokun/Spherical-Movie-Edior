@@ -4,7 +4,7 @@ using UnityEngine.Playables;
 
 namespace yutoVR.SphericalMovieEditor
 {
-    public class PlayState : MonoBehaviour
+    public class PlayingState : MonoBehaviour
     {
         static PlayableDirector directorCache;
         static PlayableDirector Director
@@ -19,7 +19,7 @@ namespace yutoVR.SphericalMovieEditor
         }
 
 
-        public static bool IsPreviewing => Application.isPlaying && !RecorderOptions.Options.startRecordingOnEnterPlayMode;
+        public static bool IsPreviewingInPlayMode => Application.isPlaying && !RecorderOptions.Options.startRecordingOnEnterPlayMode;
         public static bool IsRecording => Application.isPlaying && RecorderOptions.Options.startRecordingOnEnterPlayMode;
         public static bool IsScrubbing => !Application.isPlaying && !Director.playableGraph.IsPlaying();
         public static bool IsPlayingTimelineInEditor => !Application.isPlaying && Director.playableGraph.IsPlaying();
