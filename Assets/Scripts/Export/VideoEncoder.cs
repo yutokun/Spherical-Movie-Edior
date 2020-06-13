@@ -154,7 +154,7 @@ namespace yutoVR.SphericalMovieEditor
             var clipPath = Path.Combine(Directory.GetCurrentDirectory(), clip.originalPath);
             var startInfo = new ProcessStartInfo
             {
-                Arguments = $"-r {clip.frameRate.ToString()} -i \"{clipPath}\" -s 512x512 -vcodec libx264 -an -pix_fmt yuv420p \"{destination}\"",
+                Arguments = $"-r {clip.frameRate.ToString()} -i \"{clipPath}\" -s 512x512 -vcodec libx264 -acodec copy -pix_fmt yuv420p \"{destination}\"",
                 FileName = "ffmpeg",
                 WorkingDirectory = PathProvider.WorkDir
             };
