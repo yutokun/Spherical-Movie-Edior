@@ -1,5 +1,7 @@
-﻿using UnityEditor;
+﻿using System.Linq;
+using UnityEditor;
 using UnityEngine;
+using UnityEngine.Playables;
 using UnityEngine.Video;
 
 namespace yutoVR.SphericalMovieEditor
@@ -64,6 +66,23 @@ namespace yutoVR.SphericalMovieEditor
         public void UseOriginalClip()
         {
             player.clip = clip;
+        }
+    }
+
+    [CustomEditor(typeof(SphericalMovieEditor))]
+    public class SphericalMovieEditorInspector : Editor
+    {
+        public override void OnInspectorGUI()
+        {
+            base.OnInspectorGUI();
+
+            EditorGUILayout.Space();
+            if (GUILayout.Button("Open Timeline"))
+            {
+                EditorApplication.ExecuteMenuItem("Window/Sequencing/Timeline");
+                var directors = FindObjectsOfType<PlayableDirector>();
+                Selection.activeGameObject = directors.First(d => d.GetComponent<TimelinePlayer>()).gameObject;
+            }
         }
     }
 }

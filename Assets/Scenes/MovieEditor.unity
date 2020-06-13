@@ -356,7 +356,7 @@ VideoPlayer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 157268927}
   m_Enabled: 1
-  m_VideoClip: {fileID: 32900000, guid: a1cba3939b7de30409fd5e01c3f964d0, type: 3}
+  m_VideoClip: {fileID: 32900000, guid: 83762db7a195b64438779b7bf57b489d, type: 3}
   m_TargetCameraAlpha: 1
   m_TargetCamera3DLayout: 0
   m_TargetCamera: {fileID: 963194227}
@@ -547,7 +547,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   clip: {fileID: 32900000, guid: a1cba3939b7de30409fd5e01c3f964d0, type: 3}
-  useProxy: 0
+  useProxy: 1
 --- !u!1 &434737982
 GameObject:
   m_ObjectHideFlags: 0
@@ -6222,7 +6222,7 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
+    rgba: 201326591
   m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
@@ -6428,7 +6428,7 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
+    rgba: 6762287
   m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
