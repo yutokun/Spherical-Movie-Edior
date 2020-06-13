@@ -14,8 +14,6 @@ namespace yutoVR.SphericalMovieEditor
             }
         }
 
-        // TODO Timeline が終わっているかどうかを教えてあげられるようにする
-
         void OnApplicationQuit()
         {
             RecorderOptions.Options.startRecordingOnEnterPlayMode = false;

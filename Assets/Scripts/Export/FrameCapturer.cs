@@ -22,10 +22,7 @@ namespace yutoVR.SphericalMovieEditor
         static VideoPlayer video;
         static ImageRecorderSettings image;
         static RecorderController controller;
-        static float frameDelta;
-        static long frame;
-        static bool nextFrameExists = true;
-        static float timePreviousCaptured;
+        static ulong captureId;
 
         public static void Export()
         {
@@ -90,63 +87,20 @@ namespace yutoVR.SphericalMovieEditor
 
             controller = new RecorderController(settings);
 
-            // TODO こいつらは Timeline 側で動くべきなんじゃねーの？ 通知してもらうだけでも良いは良いが。いや、isPlaying とかが取れればそれで良いはず
-            frameDelta = 1f / video.frameRate;
-            video.isLooping = false;
-            video.sendFrameReadyEvents = true;
-            video.prepareCompleted += VideoOnPrepared;
-            video.frameReady += VideoOnFrameReady;
-            video.Prepare();
+            captureId = 0;
+            TimelinePlayer.Current.PlayFrameByFrame();
         }
 
-        static async void VideoOnPrepared(VideoPlayer source)
+        public static async UniTask CaptureFrame()
         {
-            ProgressUI.Current.SetProgress(video.frame, video.frameCount);
-            Debug.Log("Start Capturing");
-
-            timePreviousCaptured = Time.unscaledTime;
-            while (video.isPrepared)
-            {
-                var delay = UniTask.WaitUntil(() => (Time.unscaledTime - timePreviousCaptured) > 5f);
-                var userAction = UniTask.WaitUntil(() => Input.GetKeyDown(KeyCode.N));
-                await UniTask.WhenAny(delay, userAction);
-                Next();
-                Debug.Log($"Capturing is stuck. Trying to read next frame: {frame.ToString()}.");
-                timePreviousCaptured = Time.unscaledTime;
-            }
-        }
-
-        static async void VideoOnFrameReady(VideoPlayer source, long frameidx)
-        {
-            image.FileNameGenerator.FileName = $"image_{video.frame:0000000}";
+            image.FileNameGenerator.FileName = $"image_{captureId:0000000}";
+            ++captureId;
             controller.PrepareRecording();
             controller.StartRecording();
             await UniTask.WaitWhile(() => controller.IsRecording());
-            ProgressUI.Current.SetProgress(video.frame, video.frameCount);
-            timePreviousCaptured = Time.unscaledTime;
-            if (nextFrameExists)
-            {
-                nextFrameExists = Next();
-            }
-
-            if (!nextFrameExists)
-            {
-                Debug.Log("Finish Capturing");
-                Encode();
-                EditorApplication.ExitPlaymode();
-            }
         }
 
-        /// <summary>
-        /// Show next frame.
-        /// </summary>
-        /// <returns>Return true when another frame exists.</returns>
-        static bool Next()
-        {
-            video.frame = ++frame;
-            return video.frame + 1 < (long)video.frameCount;
-        }
-
+        // TODO Encoder に移す
         public static async void Encode()
         {
             var path = await VideoEncoder.ExtractAudio();

@@ -30,7 +30,7 @@ public class ProgressUI : MonoBehaviour
         canvas.enabled = RecorderOptions.Options.startRecordingOnEnterPlayMode;
     }
 
-    public void SetProgress(long frame, ulong frameCount)
+    public void SetProgress(ulong frame, ulong frameCount)
     {
         var progressRate = frame / (float)frameCount;
         progressBar.value = progressRate;
