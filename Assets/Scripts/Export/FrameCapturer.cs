@@ -16,7 +16,7 @@ namespace yutoVR.SphericalMovieEditor
         H265_NVENC
     }
 
-    public class VideoRecorder : EditorWindow
+    public class FrameCapturer : EditorWindow
     {
         static RecorderOptions options;
         static VideoPlayer video;
@@ -56,7 +56,7 @@ namespace yutoVR.SphericalMovieEditor
             EditorUtility.SetDirty(options);
             AssetDatabase.SaveAssets();
             EditorApplication.EnterPlaymode();
-            // ここでシーンに配置した VideoRecorderBridge が StartRecording を叩く。
+            // ここでシーンに配置した VideoRecorderBridge が StartCapturing を叩く。
             // なぜならプレイモードに入るタイミングで、おそらくドメインがリロードされて実行が停止してしまうからだ。
         }
 
@@ -66,7 +66,7 @@ namespace yutoVR.SphericalMovieEditor
             video = FindObjectOfType<VideoPlayer>();
         }
 
-        public static void StartRecording()
+        public static void StartCapturing()
         {
             LoadPrerequisites();
             var settings = CreateInstance<RecorderControllerSettings>();

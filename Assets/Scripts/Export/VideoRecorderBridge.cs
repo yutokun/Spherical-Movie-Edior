@@ -15,9 +15,11 @@ namespace yutoVR.SphericalMovieEditor
             if (options.startRecordingOnEnterPlayMode)
             {
                 SphericalMovieEditor.Current.UseOriginalClip();
-                VideoRecorder.StartRecording();
+                FrameCapturer.StartCapturing();
             }
         }
+        
+        // TODO Timeline が終わっているかどうかを教えてあげられるようにする
 
         void OnApplicationQuit()
         {
