@@ -1,10 +1,9 @@
 ﻿using UnityEngine;
-using UnityEngine.Timeline;
 using UnityEngine.Video;
 
 namespace yutoVR.SphericalMovieEditor
 {
-    public class VideoTransporter : MonoBehaviour, ITimeControl
+    public class VideoTransporter : MonoBehaviour
     {
         [SerializeField]
         Material mat;
@@ -15,29 +14,6 @@ namespace yutoVR.SphericalMovieEditor
         void Update()
         {
             mat.mainTexture = video.texture;
-        }
-
-        public void SetTime(double time)
-        {
-            if (Application.isPlaying) return;
-
-            video.time = time;
-            mat.mainTexture = video.texture;
-        }
-
-        public void OnControlTimeStart()
-        {
-            if (Application.isPlaying) return;
-
-            video.Play();
-            video.Pause();
-        }
-
-        public void OnControlTimeStop()
-        {
-            if (Application.isPlaying) return;
-
-            if (video != null) video.Stop();
         }
     }
 }
