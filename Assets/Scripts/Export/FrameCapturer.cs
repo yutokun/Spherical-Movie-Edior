@@ -22,6 +22,7 @@ namespace yutoVR.SphericalMovieEditor
         static VideoPlayer video;
         static ImageRecorderSettings image;
         static RecorderController controller;
+        static float frameDelta;
         static long frame;
         static bool nextFrameExists = true;
         static float timePreviousCaptured;
@@ -89,6 +90,8 @@ namespace yutoVR.SphericalMovieEditor
 
             controller = new RecorderController(settings);
 
+            // TODO こいつらは Timeline 側で動くべきなんじゃねーの？ 通知してもらうだけでも良いは良いが。いや、isPlaying とかが取れればそれで良いはず
+            frameDelta = 1f / video.frameRate;
             video.isLooping = false;
             video.sendFrameReadyEvents = true;
             video.prepareCompleted += VideoOnPrepared;

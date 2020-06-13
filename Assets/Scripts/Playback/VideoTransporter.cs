@@ -13,7 +13,7 @@ namespace yutoVR.SphericalMovieEditor
 
         void Update()
         {
-            mat.mainTexture = video.texture;
+            // mat.mainTexture = video.texture;
         }
     }
 }

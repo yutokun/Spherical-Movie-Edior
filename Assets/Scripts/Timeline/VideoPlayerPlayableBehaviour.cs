@@ -9,24 +9,23 @@ public class VideoPlayerPlayableBehaviour : PlayableBehaviour
 
     public override void OnBehaviourPlay(Playable playable, FrameData info)
     {
-        if (Application.isPlaying || video == null) return;
+        if (video == null) return;
 
         video.Play();
-        video.Pause();
     }
 
     public override void OnBehaviourPause(Playable playable, FrameData info)
     {
-        if (Application.isPlaying) return;
+        if (video == null) return;
 
-        if (video != null) video.Stop();
+        video.Stop();
     }
 
     public override void PrepareFrame(Playable playable, FrameData info)
     {
-        if (Application.isPlaying || video == null) return;
+        if (video == null) return;
 
-        video.time = playable.GetTime();
+        if (!Application.isPlaying) video.time = playable.GetTime();
         mat.mainTexture = video.texture;
     }
 }

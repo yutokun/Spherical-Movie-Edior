@@ -326,7 +326,6 @@ GameObject:
   - component: {fileID: 157268929}
   - component: {fileID: 157268928}
   - component: {fileID: 157268931}
-  - component: {fileID: 157268932}
   m_Layer: 0
   m_Name: Video Player
   m_TagString: Untagged
@@ -379,7 +378,7 @@ VideoPlayer:
   m_ControlledAudioTrackCount: 1
   m_PlayOnAwake: 0
   m_SkipOnDrop: 1
-  m_Looping: 1
+  m_Looping: 0
   m_WaitForFirstFrame: 1
   m_FrameReadyEventEnabled: 1
 --- !u!4 &157268930
@@ -406,18 +405,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 30873639ae89860488b4fee29e35d987, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &157268932
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 157268927}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a606a2a6df0423b48a529a2df64e4795, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &259476765
@@ -6222,7 +6209,7 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 201326591
+    rgba: 4294967295
   m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
@@ -6428,7 +6415,7 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 6762287
+    rgba: 4294967295
   m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
