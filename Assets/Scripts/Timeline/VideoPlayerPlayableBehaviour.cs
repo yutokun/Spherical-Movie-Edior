@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Cysharp.Threading.Tasks;
+using UnityEngine;
 using UnityEngine.Playables;
 using UnityEngine.Video;
 
@@ -13,22 +14,28 @@ namespace yutoVR.SphericalMovieEditor
         {
             if (video == null) return;
 
-            if (PlayingState.IsPreviewingInPlayMode) video.Play();
+            if (PlayingState.IsPreviewingInPlayMode || PlayingState.IsScrubbing) video.Play();
         }
 
         public override void OnBehaviourPause(Playable playable, FrameData info)
         {
             if (video == null) return;
 
-            if (PlayingState.IsPreviewingInPlayMode) video.Stop();
+            if (PlayingState.IsPreviewingInPlayMode || PlayingState.IsScrubbing) video.Stop();
         }
 
-        public override void PrepareFrame(Playable playable, FrameData info)
+        public override async void PrepareFrame(Playable playable, FrameData info)
         {
             if (video == null) return;
 
-            if (!Application.isPlaying) video.time = playable.GetTime();
+            if (PlayingState.IsScrubbing) video.time = playable.GetTime();
             mat.mainTexture = video.texture;
+            if (PlayingState.IsScrubbing)
+            {
+                video.Play();
+                await UniTask.Delay(300);
+                video.Pause();
+            }
         }
     }
 }
