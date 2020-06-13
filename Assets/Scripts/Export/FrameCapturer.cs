@@ -63,7 +63,7 @@ namespace yutoVR.SphericalMovieEditor
 
         static void LoadPrerequisites()
         {
-            options = AssetDatabase.LoadAssetAtPath<RecorderOptions>(PathProvider.OptionPath);
+            options = RecorderOptions.Options;
             video = FindObjectOfType<VideoPlayer>();
         }
 
