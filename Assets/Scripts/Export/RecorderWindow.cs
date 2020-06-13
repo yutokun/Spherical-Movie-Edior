@@ -6,8 +6,6 @@ namespace yutoVR.SphericalMovieEditor
 {
     public class RecorderWindow : EditorWindow
     {
-        static RecorderOptions options;
-
         [MenuItem("Movie/Export...")]
         public static void Create()
         {
@@ -16,7 +14,7 @@ namespace yutoVR.SphericalMovieEditor
             window.maxSize = new Vector2(320, 274);
             window.autoRepaintOnSceneChange = true;
 
-            options = AssetDatabase.LoadAssetAtPath<RecorderOptions>(PathProvider.OptionPath);
+            var options = RecorderOptions.Options;
 
             if (options == null)
             {
@@ -27,7 +25,7 @@ namespace yutoVR.SphericalMovieEditor
 
         void OnGUI()
         {
-            if (options == null) options = AssetDatabase.LoadAssetAtPath<RecorderOptions>(PathProvider.OptionPath);
+            var options = RecorderOptions.Options;
 
             EditorGUI.BeginChangeCheck();
 

@@ -1,5 +1,4 @@
-﻿using UnityEditor;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.SpatialTracking;
 
 namespace yutoVR.SphericalMovieEditor
@@ -8,10 +7,7 @@ namespace yutoVR.SphericalMovieEditor
     {
         void Awake()
         {
-            var options = AssetDatabase.LoadAssetAtPath<RecorderOptions>(PathProvider.OptionPath);
-            if (!options) return;
-
-            if (options.startRecordingOnEnterPlayMode)
+            if (RecorderOptions.Options.startRecordingOnEnterPlayMode)
             {
                 GetComponent<TrackedPoseDriver>().enabled = false;
             }

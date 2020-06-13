@@ -1,4 +1,5 @@
 ﻿using System;
+using UnityEditor;
 using UnityEditor.Recorder;
 using UnityEngine;
 
@@ -7,6 +8,11 @@ namespace yutoVR.SphericalMovieEditor
     [Serializable]
     public class RecorderOptions : ScriptableObject
     {
+        static RecorderOptions options;
+
+        public static RecorderOptions Options => options ? options : options = AssetDatabase.LoadAssetAtPath<RecorderOptions>(PathProvider.OptionPath);
+        // TODO ない場合にデフォルトのを作る処理を入れとく
+
         [HideInInspector]
         public bool startRecordingOnEnterPlayMode;
 

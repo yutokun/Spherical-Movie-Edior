@@ -23,6 +23,7 @@ namespace yutoVR.SphericalMovieEditor
         void Update()
         {
             Debug.Log($"isPlaying:{video.isPlaying.ToString()} isPaused:{video.isPaused.ToString()} isPrepared:{video.isPrepared.ToString()}");
+            
             if (video.isPlaying)
             {
                 var tracks = (director.playableAsset as TimelineAsset)?.GetOutputTracks();

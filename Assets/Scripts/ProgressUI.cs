@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 using yutoVR.SphericalMovieEditor;
@@ -28,15 +27,7 @@ public class ProgressUI : MonoBehaviour
     void Awake()
     {
         Current = this;
-
-        var options = AssetDatabase.LoadAssetAtPath<RecorderOptions>(PathProvider.OptionPath);
-        if (!options)
-        {
-            canvas.enabled = false;
-            return;
-        }
-
-        canvas.enabled = options.startRecordingOnEnterPlayMode;
+        canvas.enabled = RecorderOptions.Options.startRecordingOnEnterPlayMode;
     }
 
     public void SetProgress(long frame, ulong frameCount)
