@@ -130,7 +130,7 @@ namespace yutoVR.SphericalMovieEditor
             var path = await VideoEncoder.ExtractAudio();
             if (string.IsNullOrEmpty(path)) return;
             LoadPrerequisites();
-            VideoEncoder.EncodeToVideo(video.clip, options.Codec, options.FileName, options.Crf, path);
+            VideoEncoder.EncodeImagesToVideo(video.clip, options.Codec, options.FileName, options.Crf, path);
         }
 
         // TODO エディタ拡張の似たやつ

@@ -92,7 +92,7 @@ namespace yutoVR.SphericalMovieEditor
             return extension;
         }
 
-        public static void EncodeToVideo(VideoClip clip, Codec codec, string fileName, int crf, string audioPath)
+        public static void EncodeImagesToVideo(VideoClip clip, Codec codec, string fileName, int crf, string audioPath)
         {
             if (!FfmpegIsAvailable)
             {
@@ -134,6 +134,7 @@ namespace yutoVR.SphericalMovieEditor
             process.Start();
             Debug.Log($"Creating video in {destination}");
         }
+
 
         static string GetValidFilePath(string fileName)
         {
