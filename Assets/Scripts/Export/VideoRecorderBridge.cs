@@ -16,6 +16,7 @@ namespace yutoVR.SphericalMovieEditor
 
             if (options.startRecordingOnEnterPlayMode)
             {
+                SphericalMovieEditor.Current.UseOriginalClip();
                 player = GetComponent<VideoPlayer>();
                 VideoRecorder.StartRecording();
             }

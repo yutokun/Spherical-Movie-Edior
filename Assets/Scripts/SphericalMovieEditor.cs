@@ -6,6 +6,8 @@ namespace yutoVR.SphericalMovieEditor
 {
     public class SphericalMovieEditor : MonoBehaviour
     {
+        public static SphericalMovieEditor Current { get; private set; }
+
         [SerializeField]
         VideoClip clip;
 
@@ -23,6 +25,11 @@ namespace yutoVR.SphericalMovieEditor
         }
 
         VideoPlayer player;
+
+        void Awake()
+        {
+            Current = this;
+        }
 
         void OnValidate()
         {
@@ -52,6 +59,11 @@ namespace yutoVR.SphericalMovieEditor
             }
 
             player.clip = useProxy ? ProxyClip : clip;
+        }
+
+        public void UseOriginalClip()
+        {
+            player.clip = clip;
         }
     }
 }
