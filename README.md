@@ -51,7 +51,14 @@ Movie/Export... メニューから、Capture and Encode を押すと、プロジ
 
 ### 動画の用意
 
-立体物を追加したい動画を Unity にインポートします。Scenes/SampleScene を開き、Video Player にアタッチして下さい。URL 指定には対応予定です。
+立体物を追加したい動画を Unity にインポートします。Scenes/MovieEditor を開き、SphericalMovieEditor の Clip にアタッチして下さい。
+
+![SMEInspector](doc/SMEInspector.png)
+
+| 名称      | 機能                                                         |
+| --------- | ------------------------------------------------------------ |
+| Clip      | 立体物を追加したい動画をセットします                         |
+| Use Proxy | 低解像度のプロキシ動画を作成し、プレビュー再生やタイムラインでのスクラブ時に使用します。エクスポート時はオリジナルの動画が自動的に使用されます。 |
 
 ### 立体物の追加
 
