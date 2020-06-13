@@ -22,12 +22,13 @@ namespace yutoVR.SphericalMovieEditor
 
         void Update()
         {
-            Debug.Log($"isPlaying:{video.isPlaying.ToString()} isPaused:{video.isPaused.ToString()} isPrepared:{video.isPrepared.ToString()}");
+            // Debug.Log($"isPlaying:{video.isPlaying.ToString()} isPaused:{video.isPaused.ToString()} isPrepared:{video.isPrepared.ToString()}");
 
             if (PlayingState.IsPreviewingInPlayMode)
             {
                 if (video.isPlaying)
                 {
+                    // TODO キャッシュ
                     var tracks = (director.playableAsset as TimelineAsset)?.GetOutputTracks();
                     var track = tracks.First(t => t.name == "Video Preview");
                     var clip = track.GetClips().First(c => c.displayName == "VideoPlayerPlayableAsset");
@@ -36,7 +37,7 @@ namespace yutoVR.SphericalMovieEditor
                     director.time = startTime + video.time;
                     director.Evaluate();
                 }
-                else
+                else if (director.time <= director.duration)
                 {
                     // TODO ビデオ領域外の時のタイムライン駆動・DeferredEval のほうが良いとか？ある？
                     var frameDelta = 1f / video.frameRate;
