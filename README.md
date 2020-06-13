@@ -35,19 +35,7 @@
 
 VR180 の場合は、Google の [VR180 Creator](https://arvr.google.com/vr180/apps/) で編集用に動画を変換して下さい。
 
-## 使い方（簡易版・WIP）
-
-SampleScene の Video Player に動画をセットします。
-
-Assets/Timeline/Video Composition タイムライン上にオブジェクトを実装します。
-
-VR でのプレビューは、プレイモードでできるのではないでしょうか（未検証・視点の 3DoF 固定は未実装なのでベンダの SDK で）
-
-Movie/Export... メニューから、Capture and Encode を押すと、プロジェクトフォルダ内に全てのフレームを画像として出力します。ffmpeg が使用できる場合、これをエンコードし、指定のファイル名でデスクトップに保存します。
-
-![ExportWindow](doc/ExportWindow.png)
-
-## 使い方（詳細・WIP）
+## 使い方（WIP）
 
 ### 動画の用意
 
@@ -62,11 +50,15 @@ Movie/Export... メニューから、Capture and Encode を押すと、プロジ
 
 ### 立体物の追加
 
-Timeline/Video Composition タイムラインに動画を追加します。
+シーンにオブジェクトを追加します。Timeline/Video Composition タイムライン上で制御すると、想定通りに出力されやすくなります。
 
-### 出力の方法
+### VR でのプレビュー
 
-Movie メニューから Export... を選択すると次のウインドウが現れます。
+プレイモードで確認できます。
+
+### 動画の出力
+
+Movie メニューから Export... を選択すると次のウインドウが現れます。Capture and Encode を押すとデスクトップに動画を出力します。
 
 ![Menu](doc/Menu.png)
 
