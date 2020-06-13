@@ -1,4 +1,5 @@
 ﻿using System;
+using UnityEditor.Recorder;
 using UnityEngine;
 
 namespace yutoVR.SphericalMovieEditor
@@ -45,6 +46,15 @@ namespace yutoVR.SphericalMovieEditor
         {
             get => stereoSeparation;
             set => stereoSeparation = value;
+        }
+
+        [SerializeField]
+        ImageRecorderSettings.ImageRecorderOutputFormat intermediateFormat = ImageRecorderSettings.ImageRecorderOutputFormat.JPEG;
+
+        public ImageRecorderSettings.ImageRecorderOutputFormat IntermediateFormat
+        {
+            get => intermediateFormat;
+            set => intermediateFormat = value;
         }
 
         [SerializeField, Header("Encode Settings")]

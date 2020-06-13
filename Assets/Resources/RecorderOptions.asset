@@ -18,6 +18,7 @@ MonoBehaviour:
   mapSize: 4096
   renderStereo: 1
   stereoSeparation: 0.065
+  intermediateFormat: 1
   codec: 0
   crf: 23
   fileName: encoded

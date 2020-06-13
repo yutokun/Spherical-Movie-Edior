@@ -81,7 +81,7 @@ namespace yutoVR.SphericalMovieEditor
                 RenderStereo = options.renderStereo,
                 StereoSeparation = options.StereoSeparation,
             };
-            image.OutputFormat = ImageRecorderSettings.ImageRecorderOutputFormat.PNG;
+            image.OutputFormat = options.IntermediateFormat;
             image.FileNameGenerator.Root = OutputPath.Root.Absolute;
             image.FileNameGenerator.Leaf = PathProvider.WorkDir;
             settings.AddRecorderSettings(image);
@@ -138,7 +138,7 @@ namespace yutoVR.SphericalMovieEditor
             var path = await VideoEncoder.ExtractAudio();
             if (string.IsNullOrEmpty(path)) return;
             LoadPrerequisites();
-            VideoEncoder.EncodeImagesToVideo(video.clip, options.Codec, options.FileName, options.Crf, path);
+            VideoEncoder.EncodeImagesToVideo(video.clip, options.IntermediateFormat, options.Codec, options.FileName, options.Crf, path);
         }
     }
 }

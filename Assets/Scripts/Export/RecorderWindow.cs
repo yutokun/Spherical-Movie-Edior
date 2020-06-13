@@ -1,4 +1,5 @@
 ﻿using UnityEditor;
+using UnityEditor.Recorder;
 using UnityEngine;
 
 namespace yutoVR.SphericalMovieEditor
@@ -11,8 +12,8 @@ namespace yutoVR.SphericalMovieEditor
         public static void Create()
         {
             var window = GetWindow<RecorderWindow>("Spherical Movie Editor");
-            window.minSize = new Vector2(320, 254);
-            window.maxSize = new Vector2(320, 254);
+            window.minSize = new Vector2(320, 274);
+            window.maxSize = new Vector2(320, 274);
             window.autoRepaintOnSceneChange = true;
 
             options = AssetDatabase.LoadAssetAtPath<RecorderOptions>(PathProvider.OptionPath);
@@ -36,6 +37,7 @@ namespace yutoVR.SphericalMovieEditor
             var mapSize = EditorGUILayout.IntField("Map Size", options.MapSize);
             var renderStereo = EditorGUILayout.Toggle("Render Stereo", options.renderStereo);
             var stereoSeparation = EditorGUILayout.FloatField("Stereo Separation", options.StereoSeparation);
+            var intermediateFormat = EditorGUILayout.EnumPopup("Intermediate Format", options.IntermediateFormat);
 
             EditorGUILayout.Space();
             EditorGUILayout.LabelField("Encode Settings", EditorStyles.boldLabel);
@@ -51,6 +53,7 @@ namespace yutoVR.SphericalMovieEditor
                 options.MapSize = mapSize;
                 options.renderStereo = renderStereo;
                 options.StereoSeparation = stereoSeparation;
+                options.IntermediateFormat = (ImageRecorderSettings.ImageRecorderOutputFormat)intermediateFormat;
                 options.Codec = (Codec)codec;
                 options.Crf = crf;
                 options.FileName = fileName;

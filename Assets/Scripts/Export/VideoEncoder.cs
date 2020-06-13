@@ -4,6 +4,7 @@ using System.IO;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Cysharp.Threading.Tasks;
+using UnityEditor.Recorder;
 using UnityEngine;
 using UnityEngine.Video;
 using Debug = UnityEngine.Debug;
@@ -93,7 +94,7 @@ namespace yutoVR.SphericalMovieEditor
             return extension;
         }
 
-        public static async void EncodeImagesToVideo(VideoClip clip, Codec codec, string fileName, int crf, string audioPath)
+        public static async void EncodeImagesToVideo(VideoClip clip, ImageRecorderSettings.ImageRecorderOutputFormat intermediateFormat, Codec codec, string fileName, int crf, string audioPath)
         {
             if (!FfmpegIsAvailable)
             {
@@ -125,9 +126,10 @@ namespace yutoVR.SphericalMovieEditor
             }
 
             var destination = GetValidFilePath(fileName);
+            var extension = intermediateFormat == ImageRecorderSettings.ImageRecorderOutputFormat.JPEG ? "jpg" : intermediateFormat.ToString().ToLower();
             var startInfo = new ProcessStartInfo
             {
-                Arguments = $"-r {clip.frameRate.ToString()} -i image_%07d.png -i \"{audioPath}\" -vcodec {codecStr} -crf {crf.ToString()} -pix_fmt yuv420p \"{destination}\"",
+                Arguments = $"-r {clip.frameRate.ToString()} -i image_%07d.{extension} -i \"{audioPath}\" -vcodec {codecStr} -crf {crf.ToString()} -pix_fmt yuv420p \"{destination}\"",
                 FileName = "ffmpeg",
                 WorkingDirectory = PathProvider.WorkDir
             };
