@@ -122,7 +122,6 @@ namespace yutoVR.SphericalMovieEditor
         static bool Next()
         {
             video.frame += 1;
-            Debug.Log($"Next Frame is {(video.frame + 1).ToString()}/{frameCount.ToString()}");
             return video.frame < (frameCount - 1);
         }
 
