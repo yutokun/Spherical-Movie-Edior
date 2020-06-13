@@ -22,8 +22,9 @@ namespace yutoVR.SphericalMovieEditor
         static VideoPlayer video;
         static ImageRecorderSettings image;
         static RecorderController controller;
-        static long frameCount;
+        static long frame;
         static bool nextFrameExists = true;
+        static float timePreviousCaptured;
 
         public static void Export()
         {
@@ -89,18 +90,27 @@ namespace yutoVR.SphericalMovieEditor
             controller = new RecorderController(settings);
 
             video.isLooping = false;
-            frameCount = (long)video.frameCount;
             video.sendFrameReadyEvents = true;
-            video.started += VideoOnStarted;
+            video.prepareCompleted += VideoOnPrepared;
             video.frameReady += VideoOnFrameReady;
-            video.Play();
+            video.Prepare();
         }
 
-        static void VideoOnStarted(VideoPlayer source)
+        static async void VideoOnPrepared(VideoPlayer source)
         {
-            source.Pause();
-            source.frame = 0;
+            ProgressUI.Current.SetProgress(video.frame, video.frameCount);
             Debug.Log("Start Capturing");
+
+            timePreviousCaptured = Time.unscaledTime;
+            while (video.isPrepared)
+            {
+                var delay = UniTask.WaitUntil(() => (Time.unscaledTime - timePreviousCaptured) > 5f);
+                var userAction = UniTask.WaitUntil(() => Input.GetKeyDown(KeyCode.N));
+                await UniTask.WhenAny(delay, userAction);
+                Next();
+                Debug.Log($"Capturing is stuck. Trying to read next frame: {frame.ToString()}.");
+                timePreviousCaptured = Time.unscaledTime;
+            }
         }
 
         static async void VideoOnFrameReady(VideoPlayer source, long frameidx)
@@ -110,6 +120,7 @@ namespace yutoVR.SphericalMovieEditor
             controller.StartRecording();
             await UniTask.WaitWhile(() => controller.IsRecording());
             ProgressUI.Current.SetProgress(video.frame, video.frameCount);
+            timePreviousCaptured = Time.unscaledTime;
             if (nextFrameExists)
             {
                 nextFrameExists = Next();
@@ -129,8 +140,8 @@ namespace yutoVR.SphericalMovieEditor
         /// <returns>Return true when another frame exists.</returns>
         static bool Next()
         {
-            video.frame += 1;
-            return video.frame < (frameCount - 1);
+            video.frame = ++frame;
+            return video.frame + 1 < (long)video.frameCount;
         }
 
         public static async void Encode()
