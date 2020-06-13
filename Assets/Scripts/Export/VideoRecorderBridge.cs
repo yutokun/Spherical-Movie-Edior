@@ -1,13 +1,11 @@
 ﻿using UnityEditor;
 using UnityEngine;
-using UnityEngine.Video;
 
 namespace yutoVR.SphericalMovieEditor
 {
     public class VideoRecorderBridge : MonoBehaviour
     {
         RecorderOptions options;
-        VideoPlayer player;
 
         void Start()
         {
@@ -17,7 +15,6 @@ namespace yutoVR.SphericalMovieEditor
             if (options.startRecordingOnEnterPlayMode)
             {
                 SphericalMovieEditor.Current.UseOriginalClip();
-                player = GetComponent<VideoPlayer>();
                 VideoRecorder.StartRecording();
             }
         }
