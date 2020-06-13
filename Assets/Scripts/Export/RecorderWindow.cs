@@ -66,7 +66,7 @@ namespace yutoVR.SphericalMovieEditor
 
             if (GUILayout.Button("Encode Only"))
             {
-                FrameCapturer.Encode();
+                VideoEncoder.Encode();
             }
         }
 

@@ -15,7 +15,16 @@ namespace yutoVR.SphericalMovieEditor
     {
         const string FfmpegMissingMessage = "Couldn't execute ffmpeg. Please install it from https://ffmpeg.org/download.html";
 
-        public static async Task<string> ExtractAudio()
+        public static async void Encode()
+        {
+            var path = await ExtractAudio();
+            if (string.IsNullOrEmpty(path)) return;
+            var options = RecorderOptions.Options;
+            var video = FindObjectOfType<VideoPlayer>();
+            EncodeImagesToVideo(video.clip, options.IntermediateFormat, options.Codec, options.FileName, options.Crf, path);
+        }
+
+        static async Task<string> ExtractAudio()
         {
             if (!FfmpegIsAvailable)
             {
@@ -94,7 +103,7 @@ namespace yutoVR.SphericalMovieEditor
             return extension;
         }
 
-        public static async void EncodeImagesToVideo(VideoClip clip, ImageRecorderSettings.ImageRecorderOutputFormat intermediateFormat, Codec codec, string fileName, int crf, string audioPath)
+        static async void EncodeImagesToVideo(VideoClip clip, ImageRecorderSettings.ImageRecorderOutputFormat intermediateFormat, Codec codec, string fileName, int crf, string audioPath)
         {
             if (!FfmpegIsAvailable)
             {

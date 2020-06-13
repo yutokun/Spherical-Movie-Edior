@@ -4,7 +4,6 @@ using UnityEditor;
 using UnityEditor.Recorder;
 using UnityEditor.Recorder.Input;
 using UnityEngine;
-using UnityEngine.Video;
 
 namespace yutoVR.SphericalMovieEditor
 {
@@ -18,8 +17,6 @@ namespace yutoVR.SphericalMovieEditor
 
     public class FrameCapturer : EditorWindow
     {
-        static RecorderOptions options;
-        static VideoPlayer video;
         static ImageRecorderSettings image;
         static RecorderController controller;
         static ulong captureId;
@@ -27,7 +24,7 @@ namespace yutoVR.SphericalMovieEditor
         public static void Export()
         {
             RemoveImages();
-            PrepareToRecord();
+            PrepareToCapture();
         }
 
         static void RemoveImages()
@@ -47,9 +44,9 @@ namespace yutoVR.SphericalMovieEditor
             }
         }
 
-        static void PrepareToRecord()
+        static void PrepareToCapture()
         {
-            LoadPrerequisites();
+            var options = RecorderOptions.Options;
             options.startRecordingOnEnterPlayMode = true;
             EditorUtility.SetDirty(options);
             AssetDatabase.SaveAssets();
@@ -58,15 +55,9 @@ namespace yutoVR.SphericalMovieEditor
             // なぜならプレイモードに入るタイミングで、おそらくドメインがリロードされて実行が停止してしまうからだ。
         }
 
-        static void LoadPrerequisites()
-        {
-            options = RecorderOptions.Options;
-            video = FindObjectOfType<VideoPlayer>();
-        }
-
         public static void StartCapturing()
         {
-            LoadPrerequisites();
+            var options = RecorderOptions.Options;
             var settings = CreateInstance<RecorderControllerSettings>();
             settings.SetRecordModeToSingleFrame(0);
 
@@ -98,15 +89,6 @@ namespace yutoVR.SphericalMovieEditor
             controller.PrepareRecording();
             controller.StartRecording();
             await UniTask.WaitWhile(() => controller.IsRecording());
-        }
-
-        // TODO Encoder に移す
-        public static async void Encode()
-        {
-            var path = await VideoEncoder.ExtractAudio();
-            if (string.IsNullOrEmpty(path)) return;
-            LoadPrerequisites();
-            VideoEncoder.EncodeImagesToVideo(video.clip, options.IntermediateFormat, options.Codec, options.FileName, options.Crf, path);
         }
     }
 }
