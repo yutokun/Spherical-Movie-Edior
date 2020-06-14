@@ -51,3 +51,6 @@ OVRBuildConfig.asset
 sysinfo.txt #Unity3D Generated File On Crash Reports
 uDesktopDuplication.log
 uTouchInjection.log
+
+# Keep
+!Assets/Videos/*
