@@ -53,6 +53,7 @@ namespace yutoVR.SphericalMovieEditor
             var codec = EditorGUILayout.EnumPopup("Codec", options.Codec);
             var crf = EditorGUILayout.IntSlider("CRF", options.Crf, 0, 51);
             var maxBitrate = EditorGUILayout.FloatField("Max Bitrate (Mbps)", options.MaxBitRate);
+            var fastStart = EditorGUILayout.Toggle("Fast Start", options.fastStart);
             var fileName = EditorGUILayout.TextField("File Name", options.FileName);
 
             EditorGUILayout.Space();
@@ -71,6 +72,7 @@ namespace yutoVR.SphericalMovieEditor
                 options.Codec = (Codec)codec;
                 options.Crf = crf;
                 options.MaxBitRate = maxBitrate;
+                options.fastStart = fastStart;
                 options.FileName = fileName;
                 options.FrameTimeout = frameTimeout;
                 EditorUtility.SetDirty(options);

@@ -143,6 +143,8 @@ namespace yutoVR.SphericalMovieEditor
             set => maxBitrate = value;
         }
 
+        public bool fastStart = true;
+
         [SerializeField]
         string fileName = "encoded";
 

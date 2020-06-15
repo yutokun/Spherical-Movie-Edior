@@ -138,7 +138,7 @@ namespace yutoVR.SphericalMovieEditor
             var extension = options.IntermediateFormat == ImageRecorderSettings.ImageRecorderOutputFormat.JPEG ? "jpg" : options.IntermediateFormat.ToString().ToLower();
             var startInfo = new ProcessStartInfo
             {
-                Arguments = $"-r {clip.frameRate.ToString()} -i image_%07d.{extension} -itsoffset {audioOffset.ToString()} -i \"{audioPath}\" -vcodec {codecStr} -acodec copy -crf {options.Crf.ToString()} -maxrate {options.MaxBitRate.ToString()} -pix_fmt yuv420p \"{destination}\"",
+                Arguments = $"-r {clip.frameRate.ToString()} -i image_%07d.{extension} -itsoffset {audioOffset.ToString()} -i \"{audioPath}\" -vcodec {codecStr} -acodec copy -crf {options.Crf.ToString()} -maxrate {options.MaxBitRate.ToString()} -pix_fmt yuv420p {(options.fastStart ? "-movflags faststart " : "")}\"{destination}\"",
                 FileName = "ffmpeg",
                 WorkingDirectory = PathProvider.WorkDir
             };
