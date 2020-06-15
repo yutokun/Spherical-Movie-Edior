@@ -24,7 +24,7 @@ namespace yutoVR.SphericalMovieEditor
             AssetDatabase.Refresh();
         }
 
-        int presetId;
+        public int presetId;
         public static int PresetId
         {
             get
@@ -60,20 +60,25 @@ namespace yutoVR.SphericalMovieEditor
     [Serializable]
     public class RecorderOptions : ScriptableObject
     {
-        // TODO presetId くらいは保存しようかな？
         public static List<RecorderOptions> Presets { get; private set; } = new List<RecorderOptions>();
         public static string[] PresetNames { get; private set; }
-        public static int presetId;
+        public static int PresetId
+        {
+            get => RecorderInternalOptions.PresetId;
+            set => RecorderInternalOptions.PresetId = value;
+        }
+
         public static RecorderOptions CurrentOptions
         {
             get
             {
-                if (presetId < Presets.Count) return Presets[presetId];
+                if (Presets.Count == 0) LoadPresets();
 
-                LoadPresets();
+                if (PresetId < Presets.Count) return Presets[PresetId];
+
                 if (Presets.Count > 0)
                 {
-                    presetId = 0;
+                    PresetId = 0;
                     return Presets[0];
                 }
 
