@@ -12,5 +12,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc6c494c29c05ed488be5b930686f1d0, type: 3}
   m_Name: Internal
   m_EditorClassIdentifier: 
-  presetId: 0
-  startRecordingOnEnterPlayMode: 0
