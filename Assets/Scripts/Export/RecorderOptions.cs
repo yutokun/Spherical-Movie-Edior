@@ -69,15 +69,6 @@ namespace yutoVR.SphericalMovieEditor
             return AssetDatabase.LoadAssetAtPath<RecorderOptions>(PathProvider.DefaultOptionPath);
         }
 
-        [SerializeField, Header("Image Settings")]
-        int height = 4096;
-
-        public int Height
-        {
-            get => height;
-            set => height = value;
-        }
-
         [SerializeField]
         int width = 4096;
 
@@ -85,6 +76,15 @@ namespace yutoVR.SphericalMovieEditor
         {
             get => width;
             set => width = value;
+        }
+
+        [SerializeField, Header("Image Settings")]
+        int height = 4096;
+
+        public int Height
+        {
+            get => height;
+            set => height = value;
         }
 
         [SerializeField]

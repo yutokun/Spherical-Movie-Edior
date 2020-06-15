@@ -35,8 +35,8 @@ namespace yutoVR.SphericalMovieEditor
 
             EditorGUILayout.Space();
             EditorGUILayout.LabelField("Image Settings", EditorStyles.boldLabel);
-            var height = EditorGUILayout.IntField("Height", options.Height);
             var width = EditorGUILayout.IntField("Width", options.Width);
+            var height = EditorGUILayout.IntField("Height", options.Height);
             var mapSize = EditorGUILayout.IntField("Map Size", options.MapSize);
             var renderStereo = EditorGUILayout.Toggle("Render Stereo", options.renderStereo);
             var stereoSeparation = EditorGUILayout.FloatField("Stereo Separation", options.StereoSeparation);
@@ -56,8 +56,8 @@ namespace yutoVR.SphericalMovieEditor
             if (EditorGUI.EndChangeCheck())
             {
                 Undo.RecordObject(options, "Change Recording Option");
-                options.Height = height;
                 options.Width = width;
+                options.Height = height;
                 options.MapSize = mapSize;
                 options.renderStereo = renderStereo;
                 options.StereoSeparation = stereoSeparation;
