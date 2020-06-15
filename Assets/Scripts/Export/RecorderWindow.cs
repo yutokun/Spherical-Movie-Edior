@@ -1,5 +1,4 @@
-﻿using System.IO;
-using System.Linq;
+﻿using System.Linq;
 using UnityEditor;
 using UnityEditor.Recorder;
 using UnityEngine;
@@ -14,26 +13,27 @@ namespace yutoVR.SphericalMovieEditor
         public static void Create()
         {
             var window = GetWindow<RecorderWindow>("Spherical Movie Editor");
-            window.minSize = new Vector2(320, 324);
-            window.maxSize = new Vector2(320, 324);
+            window.minSize = new Vector2(320, 374);
+            window.maxSize = new Vector2(320, 374);
             window.autoRepaintOnSceneChange = true;
 
-            var options = RecorderOptions.Options;
+            RecorderOptions.LoadPresets();
+        }
 
-            if (options == null)
-            {
-                options = CreateInstance<RecorderOptions>();
-                Directory.CreateDirectory(PathProvider.OptionDir);
-                AssetDatabase.CreateAsset(options, PathProvider.OptionPath);
-            }
+        void OnProjectChange()
+        {
+            RecorderOptions.LoadPresets();
         }
 
         void OnGUI()
         {
-            var options = RecorderOptions.Options;
+            EditorGUILayout.LabelField("Preset", EditorStyles.boldLabel);
+            RecorderOptions.presetId = EditorGUILayout.Popup("Preset", RecorderOptions.presetId, RecorderOptions.PresetNames);
+            var options = RecorderOptions.CurrentOptions;
 
             EditorGUI.BeginChangeCheck();
 
+            EditorGUILayout.Space();
             EditorGUILayout.LabelField("Image Settings", EditorStyles.boldLabel);
             var height = EditorGUILayout.IntField("Height", options.Height);
             var width = EditorGUILayout.IntField("Width", options.Width);

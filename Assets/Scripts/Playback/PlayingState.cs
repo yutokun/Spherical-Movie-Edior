@@ -19,8 +19,8 @@ namespace yutoVR.SphericalMovieEditor
         }
 
 
-        public static bool IsPreviewingInPlayMode => Application.isPlaying && !RecorderOptions.Options.startRecordingOnEnterPlayMode;
-        public static bool IsRecording => Application.isPlaying && RecorderOptions.Options.startRecordingOnEnterPlayMode;
+        public static bool IsPreviewingInPlayMode => Application.isPlaying && !RecorderOptions.CurrentOptions.startRecordingOnEnterPlayMode;
+        public static bool IsRecording => Application.isPlaying && RecorderOptions.CurrentOptions.startRecordingOnEnterPlayMode;
         public static bool IsScrubbing => !Application.isPlaying && Director.playableGraph.IsValid() && !Director.playableGraph.IsPlaying();
         public static bool IsPlayingTimelineInEditor => !Application.isPlaying && Director.playableGraph.IsValid() && Director.playableGraph.IsPlaying();
     }

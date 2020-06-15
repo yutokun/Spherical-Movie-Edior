@@ -46,7 +46,7 @@ namespace yutoVR.SphericalMovieEditor
 
         static void PrepareToCapture()
         {
-            var options = RecorderOptions.Options;
+            var options = RecorderOptions.CurrentOptions;
             options.startRecordingOnEnterPlayMode = true;
             EditorUtility.SetDirty(options);
             AssetDatabase.SaveAssets();
@@ -57,7 +57,7 @@ namespace yutoVR.SphericalMovieEditor
 
         public static void StartCapturing()
         {
-            var options = RecorderOptions.Options;
+            var options = RecorderOptions.CurrentOptions;
             var settings = CreateInstance<RecorderControllerSettings>();
             settings.SetRecordModeToSingleFrame(0);
 

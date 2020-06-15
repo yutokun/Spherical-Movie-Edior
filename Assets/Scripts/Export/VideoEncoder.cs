@@ -19,7 +19,7 @@ namespace yutoVR.SphericalMovieEditor
         {
             var path = await ExtractAudio();
             if (string.IsNullOrEmpty(path)) return;
-            var options = RecorderOptions.Options;
+            var options = RecorderOptions.CurrentOptions;
             var video = FindObjectOfType<VideoPlayer>();
             EncodeImagesToVideo(video.clip, options.IntermediateFormat, options.Codec, options.FileName, options.Crf, path, audioOffset);
         }

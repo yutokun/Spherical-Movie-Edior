@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using UnityEditor;
 using UnityEditor.Recorder;
 using UnityEngine;
@@ -8,10 +11,58 @@ namespace yutoVR.SphericalMovieEditor
     [Serializable]
     public class RecorderOptions : ScriptableObject
     {
-        static RecorderOptions options;
+        // TODO presetId くらいは保存しようかな？
+        public static List<RecorderOptions> Presets { get; private set; } = new List<RecorderOptions>();
+        public static string[] PresetNames { get; private set; }
+        public static int presetId;
+        public static RecorderOptions CurrentOptions
+        {
+            get
+            {
+                if (presetId < Presets.Count) return Presets[presetId];
 
-        public static RecorderOptions Options => options ? options : options = AssetDatabase.LoadAssetAtPath<RecorderOptions>(PathProvider.OptionPath);
-        // TODO ない場合にデフォルトのを作る処理を入れとく
+                LoadPresets();
+                if (Presets.Count > 0)
+                {
+                    presetId = 0;
+                    return Presets[0];
+                }
+
+                CreateDefaultOptions();
+                LoadPresets();
+                return Presets[0];
+            }
+        }
+
+        public static void LoadPresets()
+        {
+            Presets.Clear();
+            Directory.CreateDirectory(PathProvider.OptionDir);
+            var assets = Directory.GetFiles(PathProvider.OptionDir);
+            foreach (var asset in assets)
+            {
+                var preset = AssetDatabase.LoadAssetAtPath<RecorderOptions>(asset);
+                if (preset == null) continue;
+                Presets.Add(preset);
+            }
+
+            if (Presets.Count == 0)
+            {
+                var options = CreateDefaultOptions();
+                Presets.Add(options);
+            }
+
+            PresetNames = Presets.Select(o => o.name).ToArray();
+        }
+
+        public static RecorderOptions CreateDefaultOptions()
+        {
+            Directory.CreateDirectory(PathProvider.OptionDir);
+            var options = CreateInstance<RecorderOptions>();
+            AssetDatabase.CreateAsset(options, PathProvider.DefaultOptionPath);
+            AssetDatabase.Refresh();
+            return AssetDatabase.LoadAssetAtPath<RecorderOptions>(PathProvider.DefaultOptionPath);
+        }
 
         [HideInInspector]
         public bool startRecordingOnEnterPlayMode;
