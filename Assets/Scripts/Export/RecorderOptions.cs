@@ -114,7 +114,7 @@ namespace yutoVR.SphericalMovieEditor
             set => intermediateFormat = value;
         }
 
-        [SerializeField, Header("Encode Settings")]
+        [SerializeField, Header("Encoder Settings")]
         Codec codec;
 
         public Codec Codec

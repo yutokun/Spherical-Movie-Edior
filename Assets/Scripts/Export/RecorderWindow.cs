@@ -43,7 +43,7 @@ namespace yutoVR.SphericalMovieEditor
             var intermediateFormat = EditorGUILayout.EnumPopup("Intermediate Format", options.IntermediateFormat);
 
             EditorGUILayout.Space();
-            EditorGUILayout.LabelField("Encode Settings", EditorStyles.boldLabel);
+            EditorGUILayout.LabelField("Encoder Settings", EditorStyles.boldLabel);
             var codec = EditorGUILayout.EnumPopup("Codec", options.Codec);
             var crf = EditorGUILayout.IntSlider("CRF", options.Crf, 0, 51);
             var fileName = EditorGUILayout.TextField("File Name", options.FileName);
