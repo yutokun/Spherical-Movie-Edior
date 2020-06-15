@@ -7,7 +7,7 @@ namespace yutoVR.SphericalMovieEditor
     {
         void Awake()
         {
-            if (RecorderOptions.CurrentOptions.startRecordingOnEnterPlayMode)
+            if (RecorderInternalOptions.StartRecordingOnEnterPlayMode)
             {
                 GetComponent<TrackedPoseDriver>().enabled = false;
             }

@@ -9,6 +9,55 @@ using UnityEngine;
 namespace yutoVR.SphericalMovieEditor
 {
     [Serializable]
+    public class RecorderInternalOptions : ScriptableObject
+    {
+        static RecorderInternalOptions options;
+
+        public static void Load()
+        {
+            Directory.CreateDirectory(PathProvider.OptionDir);
+            options = AssetDatabase.LoadAssetAtPath<RecorderInternalOptions>(PathProvider.InternalOptionPath);
+            if (options) return;
+
+            options = CreateInstance<RecorderInternalOptions>();
+            AssetDatabase.CreateAsset(options, PathProvider.InternalOptionPath);
+            AssetDatabase.Refresh();
+        }
+
+        int presetId;
+        public static int PresetId
+        {
+            get
+            {
+                if (!options) Load();
+                return options.presetId;
+            }
+            set
+            {
+                if (!options) Load();
+                options.presetId = value;
+                EditorUtility.SetDirty(options);
+            }
+        }
+
+        public bool startRecordingOnEnterPlayMode;
+        public static bool StartRecordingOnEnterPlayMode
+        {
+            get
+            {
+                if (!options) Load();
+                return options.startRecordingOnEnterPlayMode;
+            }
+            set
+            {
+                if (!options) Load();
+                options.startRecordingOnEnterPlayMode = value;
+                EditorUtility.SetDirty(options);
+            }
+        }
+    }
+
+    [Serializable]
     public class RecorderOptions : ScriptableObject
     {
         // TODO presetId くらいは保存しようかな？
@@ -63,9 +112,6 @@ namespace yutoVR.SphericalMovieEditor
             AssetDatabase.Refresh();
             return AssetDatabase.LoadAssetAtPath<RecorderOptions>(PathProvider.DefaultOptionPath);
         }
-
-        [HideInInspector]
-        public bool startRecordingOnEnterPlayMode;
 
         [SerializeField, Header("Image Settings")]
         int height = 4096;

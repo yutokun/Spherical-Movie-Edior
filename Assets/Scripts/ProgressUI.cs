@@ -27,7 +27,7 @@ public class ProgressUI : MonoBehaviour
     void Awake()
     {
         Current = this;
-        canvas.enabled = RecorderOptions.CurrentOptions.startRecordingOnEnterPlayMode;
+        canvas.enabled = RecorderInternalOptions.StartRecordingOnEnterPlayMode;
     }
 
     public void SetProgress(ulong frame, ulong frameCount)

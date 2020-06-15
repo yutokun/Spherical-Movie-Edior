@@ -7,7 +7,7 @@ namespace yutoVR.SphericalMovieEditor
     {
         void Start()
         {
-            if (RecorderOptions.CurrentOptions.startRecordingOnEnterPlayMode)
+            if (RecorderInternalOptions.StartRecordingOnEnterPlayMode)
             {
                 SphericalMovieEditor.Current.UseOriginalClip();
                 FrameCapturer.StartCapturing();
@@ -16,7 +16,7 @@ namespace yutoVR.SphericalMovieEditor
 
         void OnApplicationQuit()
         {
-            RecorderOptions.CurrentOptions.startRecordingOnEnterPlayMode = false;
+            RecorderInternalOptions.StartRecordingOnEnterPlayMode = false;
             EditorUtility.SetDirty(RecorderOptions.CurrentOptions);
             AssetDatabase.SaveAssets();
         }

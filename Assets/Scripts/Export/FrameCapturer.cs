@@ -46,10 +46,7 @@ namespace yutoVR.SphericalMovieEditor
 
         static void PrepareToCapture()
         {
-            var options = RecorderOptions.CurrentOptions;
-            options.startRecordingOnEnterPlayMode = true;
-            EditorUtility.SetDirty(options);
-            AssetDatabase.SaveAssets();
+            RecorderInternalOptions.StartRecordingOnEnterPlayMode = true;
             EditorApplication.EnterPlaymode();
             // ここでシーンに配置した VideoRecorderBridge が StartCapturing を叩く。
             // なぜならプレイモードに入るタイミングで、おそらくドメインがリロードされて実行が停止してしまうからだ。
