@@ -12,6 +12,7 @@ namespace yutoVR.SphericalMovieEditor
         public static string GetProxyPath(VideoClip clip) => Path.Combine(ProxyDir, $"proxy-{clip.name}.mp4");
         public static string GetProxyPathRelative(VideoClip clip) => Path.Combine("Assets", "Proxy", $"proxy-{clip.name}.mp4");
         public static string DestinationDir => Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-        public static string OptionPath = "Assets/Resources/RecorderOptions.asset";
+        public static string OptionPath = "Assets/RecorderOptions/CurrentOption.asset";
+        public static string OptionDir = "Assets/RecorderOptions/";
     }
 }
