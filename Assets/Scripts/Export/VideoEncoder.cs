@@ -21,7 +21,7 @@ namespace yutoVR.SphericalMovieEditor
             if (string.IsNullOrEmpty(path)) return;
             var options = RecorderOptions.CurrentOptions;
             var video = FindObjectOfType<VideoPlayer>();
-            EncodeImagesToVideo(video.clip, options.IntermediateFormat, options.Codec, options.FileName, options.Crf, options.MaxBitRate, path, audioOffset);
+            EncodeImagesToVideo(video.clip, options, path, audioOffset);
         }
 
         static async Task<string> ExtractAudio()
@@ -103,7 +103,7 @@ namespace yutoVR.SphericalMovieEditor
             return extension;
         }
 
-        static async void EncodeImagesToVideo(VideoClip clip, ImageRecorderSettings.ImageRecorderOutputFormat intermediateFormat, Codec codec, string fileName, int crf, float maxBitrate, string audioPath, double audioOffset)
+        static async void EncodeImagesToVideo(VideoClip clip, RecorderOptions options, string audioPath, double audioOffset)
         {
             if (!FfmpegIsAvailable)
             {
@@ -112,7 +112,7 @@ namespace yutoVR.SphericalMovieEditor
             }
 
             string codecStr;
-            switch (codec)
+            switch (options.Codec)
             {
                 case Codec.H264:
                     codecStr = "libx264";
@@ -134,11 +134,11 @@ namespace yutoVR.SphericalMovieEditor
                     throw new ArgumentOutOfRangeException();
             }
 
-            var destination = GetValidFilePath(fileName);
-            var extension = intermediateFormat == ImageRecorderSettings.ImageRecorderOutputFormat.JPEG ? "jpg" : intermediateFormat.ToString().ToLower();
+            var destination = GetValidFilePath(options.FileName);
+            var extension = options.IntermediateFormat == ImageRecorderSettings.ImageRecorderOutputFormat.JPEG ? "jpg" : options.IntermediateFormat.ToString().ToLower();
             var startInfo = new ProcessStartInfo
             {
-                Arguments = $"-r {clip.frameRate.ToString()} -i image_%07d.{extension} -itsoffset {audioOffset.ToString()} -i \"{audioPath}\" -vcodec {codecStr} -acodec copy -crf {crf.ToString()} -marate {maxBitrate.ToString()} -pix_fmt yuv420p \"{destination}\"",
+                Arguments = $"-r {clip.frameRate.ToString()} -i image_%07d.{extension} -itsoffset {audioOffset.ToString()} -i \"{audioPath}\" -vcodec {codecStr} -acodec copy -crf {options.Crf.ToString()} -marate {options.MaxBitRate.ToString()} -pix_fmt yuv420p \"{destination}\"",
                 FileName = "ffmpeg",
                 WorkingDirectory = PathProvider.WorkDir
             };
