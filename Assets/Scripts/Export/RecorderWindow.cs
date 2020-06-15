@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.IO;
+using System.Linq;
 using UnityEditor;
 using UnityEditor.Recorder;
 using UnityEngine;
@@ -22,6 +23,7 @@ namespace yutoVR.SphericalMovieEditor
             if (options == null)
             {
                 options = CreateInstance<RecorderOptions>();
+                Directory.CreateDirectory(PathProvider.OptionDir);
                 AssetDatabase.CreateAsset(options, PathProvider.OptionPath);
             }
         }
