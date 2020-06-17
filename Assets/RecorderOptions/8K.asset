@@ -21,6 +21,7 @@ MonoBehaviour:
   codec: 1
   crf: 18
   maxBitrate: 400
+  bufSize: 800
   fastStart: 1
   fileName: encoded
   frameTimeout: 5

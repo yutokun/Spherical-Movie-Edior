@@ -13,8 +13,8 @@ namespace yutoVR.SphericalMovieEditor
         public static void Create()
         {
             var window = GetWindow<RecorderWindow>("Spherical Movie Editor");
-            window.minSize = new Vector2(400, 394);
-            window.maxSize = new Vector2(400, 394);
+            window.minSize = new Vector2(400, 410);
+            window.maxSize = new Vector2(400, 410);
             window.autoRepaintOnSceneChange = true;
 
             RecorderOptions.LoadPresets();
@@ -55,6 +55,7 @@ namespace yutoVR.SphericalMovieEditor
             var codec = EditorGUILayout.EnumPopup("Codec", options.Codec);
             var crf = EditorGUILayout.IntSlider("CRF", options.Crf, 0, 51);
             var maxBitrate = EditorGUILayout.IntField("Max Bitrate (Mbps)", options.MaxBitRate);
+            var bufSize = EditorGUILayout.IntField("Buffer Size (Mbps)", options.BufSize);
             var fastStart = EditorGUILayout.Toggle("Fast Start", options.fastStart);
             var fileName = EditorGUILayout.TextField("File Name", options.FileName);
 
@@ -74,6 +75,7 @@ namespace yutoVR.SphericalMovieEditor
                 options.Codec = (Codec)codec;
                 options.Crf = crf;
                 options.MaxBitRate = maxBitrate;
+                options.BufSize = bufSize;
                 options.fastStart = fastStart;
                 options.FileName = fileName;
                 options.FrameTimeout = frameTimeout;

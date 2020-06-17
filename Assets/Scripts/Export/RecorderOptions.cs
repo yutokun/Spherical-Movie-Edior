@@ -143,6 +143,15 @@ namespace yutoVR.SphericalMovieEditor
             set => maxBitrate = value;
         }
 
+        [SerializeField]
+        int bufSize = 25;
+
+        public int BufSize
+        {
+            get => bufSize;
+            set => bufSize = value;
+        }
+
         public bool fastStart = true;
 
         [SerializeField]
