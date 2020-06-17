@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Cysharp.Threading.Tasks;
@@ -11,6 +12,43 @@ using Debug = UnityEngine.Debug;
 
 namespace yutoVR.SphericalMovieEditor
 {
+    public class FfmpegExecutor
+    {
+        readonly StringBuilder arguments = new StringBuilder();
+        Process ffmpeg;
+
+        public void Add(string argument, string param = "")
+        {
+            arguments.Append($"{argument} ");
+            if (param != "") arguments.Append($"{param} ");
+        }
+
+        public void SetWorkingDirectory(string directory) => ffmpeg.StartInfo.WorkingDirectory = directory;
+
+        public bool hasVisibleWindow = true;
+        public bool redirectStandardError = true; // TODO 常に true で良いのでは？
+
+        public void Execute()
+        {
+            var startInfo = new ProcessStartInfo
+            {
+                Arguments = arguments.ToString(),
+                FileName = "ffmpeg",
+                CreateNoWindow = !hasVisibleWindow,
+                UseShellExecute = hasVisibleWindow,
+                RedirectStandardError = redirectStandardError
+            };
+
+            ffmpeg = new Process { StartInfo = startInfo };
+            ffmpeg.Start();
+        }
+
+        public void WaitForExit() => ffmpeg.WaitForExit();
+        public Task<string> ReadAllErrorAsync() => ffmpeg.StandardError.ReadToEndAsync();
+
+        public static implicit operator string(FfmpegExecutor s) => s.arguments.ToString();
+    }
+
     public class VideoEncoder : MonoBehaviour
     {
         const string FfmpegMissingMessage = "Couldn't execute ffmpeg. Please install it from https://ffmpeg.org/download.html";
@@ -51,17 +89,13 @@ namespace yutoVR.SphericalMovieEditor
             var extension = await GetSuitableAudioExtension(path);
             var destination = Path.Combine(PathProvider.WorkDir, $"audio.{extension}");
 
-            var startInfo = new ProcessStartInfo
-            {
-                Arguments = $"-i \"{path}\" -vn -acodec copy \"{destination}\"",
-                FileName = "ffmpeg",
-                CreateNoWindow = true,
-                UseShellExecute = false,
-                RedirectStandardError = true
-            };
-            var extractor = new Process { StartInfo = startInfo };
-            extractor.Start();
-            extractor.WaitForExit();
+            var ffmpeg = new FfmpegExecutor();
+            ffmpeg.Add("-i", "\"{path}\"");
+            ffmpeg.Add("-vn");
+            ffmpeg.Add("-acodec", "copy");
+            ffmpeg.Add("\"{destination}\"");
+            ffmpeg.Execute();
+            ffmpeg.WaitForExit();
             return destination;
         }
 
@@ -73,17 +107,12 @@ namespace yutoVR.SphericalMovieEditor
                 return null;
             }
 
-            var startInfo = new ProcessStartInfo
-            {
-                Arguments = $"-i \"{videoPath}\"",
-                FileName = "ffmpeg",
-                CreateNoWindow = true,
-                UseShellExecute = false,
-                RedirectStandardError = true
-            };
-            var infoReader = new Process { StartInfo = startInfo };
-            infoReader.Start();
-            var result = await infoReader.StandardError.ReadToEndAsync();
+            var ffmpeg = new FfmpegExecutor();
+            ffmpeg.Add($"-i \"{videoPath}\"");
+            ffmpeg.hasVisibleWindow = false;
+            ffmpeg.redirectStandardError = true;
+            ffmpeg.Execute();
+            var result = await ffmpeg.ReadAllErrorAsync();
             var audioType = Regex.Match(result, "Audio: (?<type>.+?) ").Groups["type"].Value;
 
             var extension = "";
@@ -136,17 +165,23 @@ namespace yutoVR.SphericalMovieEditor
 
             var destination = GetValidFilePath(options.FileName);
             var extension = options.IntermediateFormat == ImageRecorderSettings.ImageRecorderOutputFormat.JPEG ? "jpg" : options.IntermediateFormat.ToString().ToLower();
-            var startInfo = new ProcessStartInfo
-            {
-                Arguments = $"-r {clip.frameRate.ToString()} -i image_%07d.{extension} -itsoffset {audioOffset.ToString()} -i \"{audioPath}\" -vcodec {codecStr} -acodec copy -crf {options.Crf.ToString()} -maxrate {options.MaxBitRate.ToString()} -pix_fmt yuv420p {(options.fastStart ? "-movflags faststart " : "")}\"{destination}\"",
-                FileName = "ffmpeg",
-                WorkingDirectory = PathProvider.WorkDir
-            };
-            var process = new Process { StartInfo = startInfo };
-            process.Start();
+            var ffmpeg = new FfmpegExecutor();
+            ffmpeg.Add("-r", clip.frameRate.ToString());
+            ffmpeg.Add("-i", $"image_%07d.{extension}");
+            ffmpeg.Add("-itsoffset", audioOffset.ToString());
+            ffmpeg.Add("-i", $"{audioPath}");
+            ffmpeg.Add("-vcodec", $"{codecStr}");
+            ffmpeg.Add("-acodec", "copy");
+            ffmpeg.Add("-crf", $"{options.Crf.ToString()}");
+            ffmpeg.Add("-maxrate", options.MaxBitRate.ToString());
+            ffmpeg.Add("-pix_fmt", "yuv420p");
+            if (options.fastStart) ffmpeg.Add("-movflags", "faststart");
+            ffmpeg.Add($"\"{destination}\"");
+            ffmpeg.SetWorkingDirectory(PathProvider.WorkDir);
+            ffmpeg.Execute();
             Debug.Log($"Creating video in {destination}");
             await UniTask.DelayFrame(2); // Wait for log.
-            process.WaitForExit();
+            ffmpeg.WaitForExit();
             Debug.Log("Video Created");
         }
 
@@ -163,17 +198,20 @@ namespace yutoVR.SphericalMovieEditor
             if (File.Exists(destination)) File.Delete(destination);
 
             var clipPath = Path.Combine(Directory.GetCurrentDirectory(), clip.originalPath);
-            var startInfo = new ProcessStartInfo
-            {
-                Arguments = $"-r {clip.frameRate.ToString()} -i \"{clipPath}\" -s 512x512 -vcodec libx264 -acodec copy -pix_fmt yuv420p \"{destination}\"",
-                FileName = "ffmpeg",
-                WorkingDirectory = PathProvider.WorkDir
-            };
-            var process = new Process { StartInfo = startInfo };
-            process.Start();
+
+            var ffmpeg = new FfmpegExecutor();
+            ffmpeg.Add("-r", $"{clip.frameRate.ToString()}");
+            ffmpeg.Add("-i", $"\"{clipPath}\"");
+            ffmpeg.Add("-s", "512x512");
+            ffmpeg.Add("-vcodec", "libx264");
+            ffmpeg.Add("-acodec", "copy");
+            ffmpeg.Add("-pix_fmt", "yuv420p");
+            ffmpeg.Add("\"{destination}\"");
+            ffmpeg.SetWorkingDirectory(PathProvider.WorkDir);
+            ffmpeg.Execute();
             Debug.Log("Creating Proxy...");
             await UniTask.DelayFrame(2); // Wait for render log.
-            process.WaitForExit();
+            ffmpeg.WaitForExit();
             Debug.Log("Proxy Created");
         }
 
@@ -191,6 +229,7 @@ namespace yutoVR.SphericalMovieEditor
             throw new Exception("Couldn't create valid file path.");
         }
 
+        // TODO Executor を Ffmpeg にして統合
         static bool FfmpegIsAvailable
         {
             get
