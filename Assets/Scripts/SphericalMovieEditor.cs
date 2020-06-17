@@ -16,7 +16,6 @@ namespace yutoVR.SphericalMovieEditor
         [SerializeField]
         bool useProxy;
 
-        bool prevUseProxy;
         VideoClip ProxyClip
         {
             get
@@ -49,15 +48,10 @@ namespace yutoVR.SphericalMovieEditor
                 return;
             }
 
-            if (useProxy != prevUseProxy)
+            if (useProxy && !ProxyClip)
             {
-                if (useProxy && !ProxyClip)
-                {
-                    await VideoEncoder.EncodeProxy(clip);
-                    AssetDatabase.Refresh();
-                }
-
-                prevUseProxy = useProxy;
+                await VideoEncoder.EncodeProxy(clip);
+                AssetDatabase.Refresh();
             }
 
             player.clip = useProxy ? ProxyClip : clip;
