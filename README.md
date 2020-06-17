@@ -92,6 +92,10 @@ Movie メニューから Export... を選択すると次のウインドウが現
 
 スキップまでの秒数は上記ウインドウで設定できます。
 
+### プリセットでエンコードしているのに、Output width must be a power of 2. が出るんじゃが？
+
+Oculus 推奨値なので問題ありません。
+
 ## Licenses
 
 ### Unity Recorder
