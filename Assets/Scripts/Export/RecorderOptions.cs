@@ -135,9 +135,9 @@ namespace yutoVR.SphericalMovieEditor
         }
 
         [SerializeField]
-        float maxBitrate = 50f;
+        int maxBitrate = 50;
 
-        public float MaxBitRate
+        public int MaxBitRate
         {
             get => maxBitrate;
             set => maxBitrate = value;
