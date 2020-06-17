@@ -100,6 +100,7 @@ namespace yutoVR.SphericalMovieEditor
             var destination = Path.Combine(PathProvider.WorkDir, $"audio.{extension}");
 
             var ffmpeg = new FfmpegExecutor();
+            ffmpeg.Add("-y");
             ffmpeg.Add("-i", $"\"{path}\"");
             ffmpeg.Add("-vn");
             ffmpeg.Add("-acodec", "copy");
