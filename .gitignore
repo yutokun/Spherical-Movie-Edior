@@ -1,14 +1,7 @@
-# =============== #
-# Unity generated #
-# =============== #
 Temp/
 Obj/
 UnityGenerated/
 Library/
-
-# ===================================== #
-# Visual Studio / MonoDevelop generated #
-# ===================================== #
 ExportedObj/
 .vs/
 .vscode/
@@ -23,10 +16,6 @@ Assets/Plugins/Editor/JetBrains*
 *.user
 *.unityproj
 *.booproj
-
-# ============ #
-# OS generated #
-# ============ #
 .DS_Store
 .DS_Store?
 ._*
@@ -34,23 +23,18 @@ Assets/Plugins/Editor/JetBrains*
 .Trashes
 ehthumbs.db
 Thumbs.db
-
-# ============ #
-# for others   #
-# ============ #
-
 *Enhanced Hierarchy*
 *RainbowAssets*
 *.DotSettings
 *.apk
 *.mp4*
 OVRBuildConfig.asset
-
 *.log #log files, for some plugins
 *.pyc #python bytecode cache, for some plugins.
 sysinfo.txt #Unity3D Generated File On Crash Reports
 uDesktopDuplication.log
 uTouchInjection.log
+VideoRecorder/
 
 # Keep
 !Assets/Videos/*
