@@ -43,7 +43,9 @@ namespace yutoVR.SphericalMovieEditor
             var height = EditorGUILayout.IntField(options.Height);
             GUILayout.EndHorizontal();
 
-            var mapSize = EditorGUILayout.IntField("Map Size", options.MapSize);
+            string[] mapSizeNames = { "Low 1024", "Medium 2048", "High 4096", "Insane 8192" };
+            int[] mapSizeVariation = { 1024, 2048, 4096, 8192 };
+            var mapSize = EditorGUILayout.IntPopup("Map Size", options.MapSize, mapSizeNames, mapSizeVariation);
             var renderStereo = EditorGUILayout.Toggle("Render Stereo", options.renderStereo);
             var stereoSeparation = EditorGUILayout.FloatField("Stereo Separation", options.StereoSeparation);
             var intermediateFormat = EditorGUILayout.EnumPopup("Intermediate Format", options.IntermediateFormat);
