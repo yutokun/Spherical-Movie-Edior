@@ -23,6 +23,7 @@ public class ProgressUI : MonoBehaviour
 
     float previousFrameTime;
     readonly List<float> deltaTimes = new List<float>();
+    TimeSpan previousRemainingTime = TimeSpan.MaxValue;
 
     void Awake()
     {
@@ -42,7 +43,12 @@ public class ProgressUI : MonoBehaviour
         deltaTimes.Add(deltaTime);
         if (deltaTimes.Count > 20) deltaTimes.RemoveAt(0);
         var avgDeltaTime = deltaTimes.Average();
-        var remainingTime = TimeSpan.FromSeconds((frameCount - (ulong)frame) * avgDeltaTime);
-        remaining.text = $"Capture Remaining {remainingTime.ToString(@"hh\:mm\:ss")}";
+        if (avgDeltaTime == 0f) return;
+        var remainingTime = TimeSpan.FromSeconds((frameCount - frame) * avgDeltaTime);
+        if (remainingTime < previousRemainingTime)
+        {
+            remaining.text = $"Capture Remaining {remainingTime.ToString(@"hh\:mm\:ss")}";
+            previousRemainingTime = remainingTime;
+        }
     }
 }
