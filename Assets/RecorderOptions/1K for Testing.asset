@@ -25,4 +25,4 @@ MonoBehaviour:
   bufSize: 20
   fastStart: 1
   fileName: encoded
-  frameTimeout: 5
+  frameTimeout: 1
