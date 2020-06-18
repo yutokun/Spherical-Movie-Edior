@@ -184,8 +184,8 @@ namespace yutoVR.SphericalMovieEditor
             ffmpeg.Add("-vcodec", $"{codecStr}");
             ffmpeg.Add("-acodec", "copy");
             ffmpeg.Add("-crf", $"{options.Crf.ToString()}");
-            ffmpeg.Add("-maxrate", options.MaxBitRate.ToString());
-            ffmpeg.Add("-bufsize", options.BufSize.ToString());
+            ffmpeg.Add("-maxrate", $"{options.MaxBitRate.ToString()}M");
+            ffmpeg.Add("-bufsize", $"{options.BufSize.ToString()}M");
             ffmpeg.Add("-pix_fmt", "yuv420p");
             if (options.fastStart) ffmpeg.Add("-movflags", "faststart");
             ffmpeg.Add($"\"{destination}\"");
