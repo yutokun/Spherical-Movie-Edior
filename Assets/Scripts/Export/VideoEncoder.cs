@@ -50,6 +50,7 @@ namespace yutoVR.SphericalMovieEditor
         {
             ffmpeg.StartInfo.Arguments = arguments.ToString();
             ffmpeg.Start();
+            Debug.Log($"FFmpeg command executed: ffmpeg {ffmpeg.StartInfo.Arguments}");
         }
 
         public void WaitForExit() => ffmpeg.WaitForExit();
