@@ -324,7 +324,6 @@ GameObject:
   m_Component:
   - component: {fileID: 157268930}
   - component: {fileID: 157268929}
-  - component: {fileID: 157268928}
   - component: {fileID: 157268931}
   m_Layer: 0
   m_Name: Video Player
@@ -333,20 +332,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &157268928
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 157268927}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 572b0fdf54bf8274099b96170f17488a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  mat: {fileID: 2100000, guid: 296e45088be338b44bdc7902c47d1c0c, type: 2}
-  video: {fileID: 157268929}
 --- !u!328 &157268929
 VideoPlayer:
   m_ObjectHideFlags: 0
@@ -642,8 +627,6 @@ PlayableDirector:
   m_DirectorUpdateMode: 1
   m_InitialTime: 0
   m_SceneBindings:
-  - key: {fileID: 4492267126758585593, guid: 73591d75f40650741854793f175ea43a, type: 2}
-    value: {fileID: 0}
   - key: {fileID: -2475086405200956569, guid: 73591d75f40650741854793f175ea43a, type: 2}
     value: {fileID: 2117713696}
   - key: {fileID: -155088316835633848, guid: 73591d75f40650741854793f175ea43a, type: 2}
@@ -652,11 +635,14 @@ PlayableDirector:
     value: {fileID: 1222124492}
   - key: {fileID: -3354141695278490855, guid: 73591d75f40650741854793f175ea43a, type: 2}
     value: {fileID: 0}
+  - key: {fileID: 3087712173739426557, guid: 73591d75f40650741854793f175ea43a, type: 2}
+    value: {fileID: 157268929}
   m_ExposedReferences:
     m_References:
     - 2acb4c0b1d018f348bbfc2b4f62d2a44: {fileID: 157268927}
     - dc1d5ed130d574a4e8193d468d46b27e: {fileID: 0}
     - 842ceb7316d0dc34db530cb64523d829: {fileID: 157268927}
+    - 6b51830e6c157d7438f835605994442e: {fileID: 157268929}
     - 077b7dd0d96693a4fb060c8074bd76f4: {fileID: 2117713690}
     - 08d183181dfeb914f90b9a72f36bf435: {fileID: 157268929}
     - c866bfb6f7d17e84f90b10edd04601f3: {fileID: 1222124488}
@@ -6209,7 +6195,7 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 16777215
+    rgba: 4294967295
   m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
@@ -6415,7 +6401,7 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4284952367
+    rgba: 4294967295
   m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3

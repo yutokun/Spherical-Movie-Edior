@@ -2,6 +2,7 @@
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Playables;
+using UnityEngine.Timeline;
 using UnityEngine.Video;
 
 namespace yutoVR.SphericalMovieEditor
@@ -55,6 +56,17 @@ namespace yutoVR.SphericalMovieEditor
             }
 
             player.clip = useProxy ? ProxyClip : clip;
+
+            SetTimelineClipLength();
+        }
+
+        void SetTimelineClipLength()
+        {
+            var director = GetComponentInChildren<PlayableDirector>();
+            var timeline = director.playableAsset as TimelineAsset;
+            var timelineClip = timeline.GetOutputTracks().First(t => t.GetType() == typeof(VideoPlayerTrackAsset))
+                                       .GetClips().First(c => c.asset.GetType() == typeof(VideoPlayerPlayableAsset));
+            timelineClip.duration = player.clip.length;
         }
 
         public void UseOriginalClip()

@@ -637,6 +637,22 @@ MonoBehaviour:
   m_Clips: []
   m_Markers:
     m_Objects: []
+--- !u!114 &-447842898241096905
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b52440dc1d5d705479ede85b5775598c, type: 3}
+  m_Name: VideoPlayerPlayableAsset
+  m_EditorClassIdentifier: 
+  videoPlayer:
+    exposedName: 6b51830e6c157d7438f835605994442e
+    defaultValue: {fileID: 0}
+  mat: {fileID: 2100000, guid: 296e45088be338b44bdc7902c47d1c0c, type: 2}
 --- !u!114 &-155088316835633848
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -692,7 +708,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Version: 0
   m_Tracks:
-  - {fileID: 4492267126758585593}
+  - {fileID: 3087712173739426557}
   - {fileID: -2475086405200956569}
   - {fileID: -155088316835633848}
   - {fileID: -3354141695278490855}
@@ -702,22 +718,6 @@ MonoBehaviour:
     m_Framerate: 60
   m_DurationMode: 0
   m_MarkerTrack: {fileID: -7164081028080302299}
---- !u!114 &829575672915302698
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b52440dc1d5d705479ede85b5775598c, type: 3}
-  m_Name: VideoClipPlayableAsset
-  m_EditorClassIdentifier: 
-  videoPlayer:
-    exposedName: 08d183181dfeb914f90b9a72f36bf435
-    defaultValue: {fileID: 0}
-  mat: {fileID: 2100000, guid: 296e45088be338b44bdc7902c47d1c0c, type: 2}
 --- !u!114 &840024369828193282
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -800,7 +800,7 @@ MonoBehaviour:
   m_OpenClipOffsetRotation: {x: 0, y: 0, z: 0, w: 1}
   m_Rotation: {x: 0, y: 0, z: 0, w: 1}
   m_ApplyOffsets: 0
---- !u!114 &4218465991914059314
+--- !u!114 &3087712173739426557
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
@@ -809,30 +809,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 48853ae485fa386428341ac1ea122570, type: 3}
-  m_Name: ControlPlayableAsset
-  m_EditorClassIdentifier: 
-  sourceGameObject:
-    exposedName: 5eb96e64dec1a744584e86b0c0ca9e69
-    defaultValue: {fileID: 0}
-  prefabGameObject: {fileID: 0}
-  updateParticle: 1
-  particleRandomSeed: 8726
-  updateDirector: 1
-  updateITimeControl: 1
-  searchHierarchy: 0
-  active: 1
-  postPlayback: 2
---- !u!114 &4492267126758585593
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 82cd92ffc29383742932b27ca414c80f, type: 3}
+  m_Script: {fileID: 11500000, guid: 87e8e5854cbb0874f8231e225e8c8742, type: 3}
   m_Name: Video Preview
   m_EditorClassIdentifier: 
   m_Version: 3
@@ -847,10 +824,10 @@ MonoBehaviour:
   - m_Version: 1
     m_Start: 0
     m_ClipIn: 0
-    m_Asset: {fileID: 829575672915302698}
+    m_Asset: {fileID: -447842898241096905}
     m_Duration: 29.016666666666666
     m_TimeScale: 1
-    m_ParentTrack: {fileID: 4492267126758585593}
+    m_ParentTrack: {fileID: 3087712173739426557}
     m_EaseInDuration: 0
     m_EaseOutDuration: 0
     m_BlendInDuration: -1
@@ -912,9 +889,32 @@ MonoBehaviour:
     m_PreExtrapolationMode: 0
     m_PostExtrapolationTime: 0
     m_PreExtrapolationTime: 0
-    m_DisplayName: VideoPlayerPlayableAsset
+    m_DisplayName: Video Player
   m_Markers:
     m_Objects: []
+--- !u!114 &4218465991914059314
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 48853ae485fa386428341ac1ea122570, type: 3}
+  m_Name: ControlPlayableAsset
+  m_EditorClassIdentifier: 
+  sourceGameObject:
+    exposedName: 5eb96e64dec1a744584e86b0c0ca9e69
+    defaultValue: {fileID: 0}
+  prefabGameObject: {fileID: 0}
+  updateParticle: 1
+  particleRandomSeed: 8726
+  updateDirector: 1
+  updateITimeControl: 1
+  searchHierarchy: 0
+  active: 1
+  postPlayback: 2
 --- !u!114 &8357549495176624195
 MonoBehaviour:
   m_ObjectHideFlags: 1

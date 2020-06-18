@@ -34,8 +34,8 @@ namespace yutoVR.SphericalMovieEditor
             director.timeUpdateMode = DirectorUpdateMode.Manual;
 
             var tracks = (director.playableAsset as TimelineAsset)?.GetOutputTracks();
-            var track = tracks.First(t => t.name == "Video Preview");
-            clip = track.GetClips().First(c => c.displayName == "VideoPlayerPlayableAsset");
+            var track = tracks.First(t => t.GetType() == typeof(VideoPlayerTrackAsset));
+            clip = track.GetClips().First(c => c.asset.GetType() == typeof(VideoPlayerPlayableAsset));
 
             frameDelta = 1f / video.frameRate;
         }
