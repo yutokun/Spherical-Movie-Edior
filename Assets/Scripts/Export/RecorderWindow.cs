@@ -100,8 +100,8 @@ namespace yutoVR.SphericalMovieEditor
                 {
                     var director = FindObjectOfType<PlayableDirector>();
                     var tracks = (director.playableAsset as TimelineAsset)?.GetOutputTracks();
-                    var track = tracks.First(t => t.name == "Video Preview");
-                    var clip = track.GetClips().First(c => c.displayName == "VideoPlayerPlayableAsset");
+                    var track = tracks.First(t => t.GetType() == typeof(VideoPlayerTrackAsset));
+                    var clip = track.GetClips().First(c => c.asset.GetType() == typeof(VideoPlayerPlayableAsset));
                     VideoEncoder.Encode(clip.start);
                 }
             }
