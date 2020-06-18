@@ -83,18 +83,21 @@ namespace yutoVR.SphericalMovieEditor
             }
 
             EditorGUILayout.Space();
-            if (GUILayout.Button("Capture and Encode"))
+            using (new EditorGUILayout.HorizontalScope())
             {
-                FrameCapturer.Export();
-            }
+                if (GUILayout.Button("Capture and Encode"))
+                {
+                    FrameCapturer.Export();
+                }
 
-            if (GUILayout.Button("Encode Only"))
-            {
-                var director = FindObjectOfType<PlayableDirector>();
-                var tracks = (director.playableAsset as TimelineAsset)?.GetOutputTracks();
-                var track = tracks.First(t => t.name == "Video Preview");
-                var clip = track.GetClips().First(c => c.displayName == "VideoPlayerPlayableAsset");
-                VideoEncoder.Encode(clip.start);
+                if (GUILayout.Button("Encode Only"))
+                {
+                    var director = FindObjectOfType<PlayableDirector>();
+                    var tracks = (director.playableAsset as TimelineAsset)?.GetOutputTracks();
+                    var track = tracks.First(t => t.name == "Video Preview");
+                    var clip = track.GetClips().First(c => c.displayName == "VideoPlayerPlayableAsset");
+                    VideoEncoder.Encode(clip.start);
+                }
             }
         }
 
