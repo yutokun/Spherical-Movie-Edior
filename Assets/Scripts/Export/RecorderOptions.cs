@@ -69,6 +69,8 @@ namespace yutoVR.SphericalMovieEditor
             return AssetDatabase.LoadAssetAtPath<RecorderOptions>(PathProvider.DefaultOptionPath);
         }
 
+        public bool lockEdit;
+
         [SerializeField, Header("Image Settings")]
         int width = 4096;
 
