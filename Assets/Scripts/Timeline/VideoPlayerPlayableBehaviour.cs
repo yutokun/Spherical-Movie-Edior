@@ -33,7 +33,20 @@ namespace yutoVR.SphericalMovieEditor
         {
             if (video == null) return;
 
-            if (PlayingState.IsPreviewingInPlayMode || PlayingState.IsScrubbing || PlayingState.IsPlayingTimelineInEditor) video.Stop();
+            if (PlayingState.IsPreviewingInPlayMode || PlayingState.IsPlayingTimelineInEditor) video.Stop();
+
+            if (PlayingState.IsScrubbing)
+            {
+                var duringVideo = (playable.GetTime() / playable.GetDuration()) < 1d;
+                if (duringVideo)
+                {
+                    video.Pause();
+                }
+                else
+                {
+                    video.Stop();
+                }
+            }
 
             if (PlayingState.IsRecording)
             {
