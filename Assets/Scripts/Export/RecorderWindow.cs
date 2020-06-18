@@ -28,8 +28,8 @@ namespace yutoVR.SphericalMovieEditor
         void OnGUI()
         {
             EditorGUILayout.LabelField("Preset", EditorStyles.boldLabel);
-            RecorderInternalOptions.PresetId = EditorGUILayout.Popup("Preset", RecorderInternalOptions.PresetId, RecorderOptions.PresetNames);
             var options = RecorderOptions.CurrentOptions;
+            RecorderInternalOptions.PresetId = EditorGUILayout.Popup("Preset", RecorderInternalOptions.PresetId, RecorderOptions.PresetNames);
 
             EditorGUI.BeginChangeCheck();
 
