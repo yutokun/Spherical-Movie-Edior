@@ -51,11 +51,5 @@
     "com.unity.modules.vr": "1.0.0",
     "com.unity.modules.wind": "1.0.0",
     "com.unity.modules.xr": "1.0.0"
-  },
-  "lock": {
-    "com.valve.openvr": {
-      "revision": "UnityXRPlugin",
-      "hash": "db9e35089d6c1d7b7c4846b7ca5fe25c47163482"
-    }
   }
 }
